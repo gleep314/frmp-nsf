@@ -1,0 +1,16 @@
+*.sublime-project
+*.sublime-workspace
+*.aux
+*.log
+*.synctex.gz
+*.pdf
+*.fdb_latexmk
+*.fls
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.ps
+*.out
+*.thm

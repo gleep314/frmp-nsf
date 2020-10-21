@@ -1,0 +1,300 @@
+%!TEX root = project_description.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Functional Reactive Chemical Networks}
+\label{sec:proposed_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Programming with chemical reaction networks is very tedious and error-prone.
+CRNs are well-mixed with all reactions proceeding in parallel, so even a minor mistake can cause dramatic side effects.
+Developers must carefully consider all possible execution paths and rigorously prove that no race conditions will cause a fault.
+This burden grows exponentially in the size of the CRN and the number of molecules involved, which often makes developing sophisticated algorithms intractable.
+Moreover, most computer scientists find molecular programming very unintuitive because of its non-sequential semantics.
+Prior work on language support for CRNs tries to abstract away the reactive nature of CRNs in favor of more traditional computational paradigms, \eg, imperative programming~\cite{khurshid2018}.
+However, these languages must work against the reactive nature of CRNs, leading to limitations and difficulties, \eg, CRN++ limits the parallelism in its execution in order to gain sequential composition~\cite{khurshid2018}.
+
+The key observation that motivates this work is that the semantics of CRNs are inherently \emph{reactive}.
+We propose embracing the reactive nature CRNs by developing a model for CRNs based on functional reactive programming.
+In this model, we take signals, our time-varying values, as entire chemical reaction networks.
+The goal of our model, therefore, is to use combinators to build up larger CRNs from smaller ones.
+This is evident in how we interpret the behavior of particular networks.
+For example, recall that the \( \max(x_1, x_2) \) function can be implemented by the following CRN:
+\begin{align*}
+    X_1 &\goesto{} A_1 + Y\\
+    X_2 &\goesto{} A_2 + Y\\
+    A_1 + A_2 &\goesto{} B\\
+    Y + B &\goesto{} \emptyset
+\end{align*}
+Here, we consider the input to the CRN a stream of \( X_1 \) and \( X_2 \) molecules and the CRN itself to be continuously processing the stream in real time.
+The helper species \( A_1 \), \( A_2 \), \( B \), and the output species \( Y \) react with the stream of input molecules as they arrive and automatically update their values accordingly.
+Notice that this characterization of the CRN continuously reacting in real-time to the time-varying input signal is the very definition of reactive programming.
+
+One of the key objectives of this project is to develop a high-level functional reactive programming (FRP) language for specifying chemical reaction networks.
+Throughout this section, we introduce preliminary results toward this end, making use of Haskell-like syntax.
+Our choice of an FRP host language is not important here; we are simply using it to define the combinators for CRNs and how to compose them to produce more advanced computations.
+
+The most elementary component of an FRP language is a notion of a \emph{signal}.
+Signals in CRNs are provided through their \emph{species}, which in our FRP language define to be a function mapping continuous-time to the number of molecules of that species provided by the signal stream.
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+type Species = Time -> Int
+\end{lstlisting}\end{tabular}\end{center}
+Thus, a CRN can be thought of as a chemical machine that receives a set of species signals as input and produces a set of output signals.
+In the language of FRP, a CRN is a \emph{combinator}, mapping lists of species to lists of species.
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+type CRN = [Species] -> [Species]
+\end{lstlisting}\end{tabular}\end{center}
+
+When using the FRP style, developers begin with \emph{primitives} that form the basic set of signals and \emph{combinators}, which allow the developer to form more complicated signals from simpler ones.
+Through the PI's prior exploration into molecular programming, they have identified the following combinators that form the core of most CRNs:
+\begin{enumerate}[wide, labelwidth=!, labelindent=0pt]
+  \item The \emph{constant combinator} specifies a signal with a constant \( n \) number of molecules for all time.
+  \begin{center}\begin{tabular}{c}\begin{lstlisting}
+    const :: Int -> Species
+  \end{lstlisting}\end{tabular}\end{center}
+  \item The \emph{logical-or combinator} that takes two species signals and produces a single species signal that emits molecules whenever one of the input species emits a molecule.
+  \begin{center}\begin{tabular}{c}\begin{lstlisting}
+    or :: Species -> Species -> Species
+  \end{lstlisting}\end{tabular}\end{center}
+  \item The \emph{logical-and combinator} which takes two species signals and produces a single species that emits molecules only when both input species have molecules present.
+  \begin{center}\begin{tabular}{c}\begin{lstlisting}
+    and :: Species -> Species -> (Species, Species)
+  \end{lstlisting}\end{tabular}\end{center}
+  \item The \emph{fork combinator} that takes one species and produces a pair of identical species signals.
+  \begin{center}\begin{tabular}{c}\begin{lstlisting}
+    fork :: Species -> (Species, Species)
+  \end{lstlisting}\end{tabular}\end{center}
+  \item The \emph{join combinator} which joins two species signals together into a pair of species signals.
+  \begin{center}\begin{tabular}{c}\begin{lstlisting}
+    join :: Species -> Species -> (Species, Species)
+  \end{lstlisting}\end{tabular}\end{center}
+\end{enumerate}
+
+Now we can specify the minimization function described in Figure~\ref{fig:min_max_example}:
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+min = do
+  x1 <- Species      -- X1
+  x2 <- Species      -- X2
+  y  <- and x1 x2    -- X1 + X2 -> Y
+  return y
+\end{lstlisting}\end{tabular}\end{center}
+Here, we declare two species signals and their concentrations \lstinline!x1! and \lstinline!x2!.
+We then add a combining equation to the CRN with \lstinline!and!.
+Finally, we produce product \lstinline!Y! as output.
+
+\lstinline!and! gives us a way of combining primitive CRNs in simple ways.
+However, the power of the combinator-based approach to developing CRNs is that we can build richer CRNs in a more declarative fashion.
+For example, if we introduce one more combinator:
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+-- sub === Y + X -> null
+sub :: Species a, Species b => a -> b -> Species s
+\end{lstlisting}\end{tabular}\end{center}
+We can now succinctly define the maximum CRN from~\autoref{fig:min_max_example}:
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+max = do
+  x1 <- Species      -- X1
+  x2 <- Species      -- X2
+  a1, b1 <- fork x1
+  a2, b2 <- fork x2
+  b  <- and a1 a2
+  y  <- or  b1 b2
+  return sub y b
+\end{lstlisting}\end{tabular}\end{center}
+
+Using the \lstinline!min! and \lstinline!max! combinators, we can also try to characterize function \( f(x_1, x_2, x_3) = \min(\max(x_1, x_2), x_3) \) from equation~\eqref{eq:min_max_function}.
+If we directly use the definition of \( f \) to define its associated combinator, we would arrive at the definition:
+
+\begin{center}\begin{tabular}{c}\begin{lstlisting}
+f = do
+  x1 <- Species      -- X1
+  x2 <- Species      -- X2
+  x3 <- Species      -- X3
+  z <- max x1 x2
+  y <= min z x3
+  return y
+\end{lstlisting}\end{tabular}\end{center}
+
+Although specifying CRNs using combinators in this way is intuitive and easy to read. Unfortunately, the combinator for \( f \) contains the same race condition fault we discovered in the introduction.
+Recall that in order for modules to be safely composed, the species signals must be constructed in a \emph{monotonically increasing} fashion~\cite{jCKRS18,doty19}.
+This is a constraint that ought to be statically enforced on the \emph{type} of species signals being generated.
+Inspecting our implementation of \lstinline!min!, we can see that it preserves monotonicity properties of its signals, but the \lstinline!max! combinator does not.
+A type system is necessary to verify these type-related properties.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A LTL-Inspired Type System for Chemical Reaction Networks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Functional reactive programming gives us a way of declaratively specifying the behavior of chemical reaction networks.
+While the original CRN formalism is already declarative in a sense, our FRP model provides additional abstractions on top of the basic CRN model through its combinator library that makes CRN's easier to specify.
+However, while the FRP model can be more convenient to write CRNs in, the model alone does relatively little to help developers \emph{validate} CRNs.
+
+Validating the correctness of CRNs is a well-explored topic~\cite{oDong12,cDLLMPS12,jKwiTha14,cEHKLLL14,jEKLLLM17}.
+However, with our linguistic approach to CRN, we have the opportunity to explore \emph{type-based} approaches to verify CRNs statically.
+Static type systems are the most prevalent verification tools among software developers by virtue of being embedded within the programming language itself~\cite{pierce-tapl-2002, Pierce:SF2}.
+Such systems allow quick and frictionless checking of the most common kinds of bugs a developer might encounter.
+
+The FRP formalism we presented in the previous section, by virtue of its presentation as an embedded Haskell library, automatically enjoys a relatively simple type system.
+However, the types of the combinators themselves are relatively simple.
+Note that the \lstinline!Species! type does not record the actual type of the species, just that it is \emph{some} kind of species.
+As a starting point towards a richer type system, we could use a standard trick from functional programming languages and use a polymorphic type \lstinline!Species a! to represent a species of type \lstinline!a!.
+Now, for example, our \lstinline!fork! combinator would have type \lstinline!Species a -> (Species a, Species a)! reflecting the fact that a species of an unknown type is given as input, and two species of that same unknown type are given as output.
+
+However, we want to do better than this!
+In particular, CRNs have many properties that would be useful to verify.
+For example, one of the most difficult challenges with molecular programming is avoiding race conditions and unintended side effects introduced throughout the development process.
+Such issues lead to CRNs that are non-compositional and thus useless in terms of building bigger systems.
+
+How do we enrich the type system of our FRP model to capture these properties?
+One foundational approach is to employ the \emph{Curry-Howard Isomorphism} which states that a logic may be interpreted as a type system for a programming language.~\cite{sorensen1998}
+This approach has been used to great effect in the field of programming languages, producing notable language features such as polymorphic types~\cite{girard1989}, session types~\cite{caires2016}, and dependent types~\cite{xi1999}, among others.
+In looking for an appropriate logic to adapt as a type system for our model, we must consider we kinds of propositions we are trying to prove and whether the logic is capable of handling these propositions.
+
+Thankfully, prior work on CRNs has already paved the way for us.
+Since many molecular programming models, including CRNs, can be modeled with labeled state transition systems, \emph{linear temporal logic} (\emph{LTL})~\cite{pnueli1997,manna2012temporal,oBaiKat08} and its variants~\cite{donze2010,donze2013,donze2015} are prominent languages for specifying requirements in this domain~\cite{pnueli1997,manna2012temporal,oBaiKat08,cLLLKMS12,cEHKLLL14,jEKLLLM17}.
+LTL is especially appropriate for our purposes, since LTL formulas describe constraints on \emph{paths} through a CRN state-space.
+Thus, we can classify the species signals being processed and produced by our previously defined FRP combinators.
+
+Formally, the syntax of an LTL formula is defined by the following Backus Naur form
+\begin{equation}
+    \phi ::= \text{true}
+             \mid a 
+             \mid \phi_1 \land \phi_2 
+             \mid \lnot\phi 
+             \mid \bigcirc\;\phi
+             \mid \phi_1 U \phi_2,
+\end{equation}
+where \( a \in AP \) is an \emph{atomic proposition}, \( \bigcirc \) is the \emph{next} operator, and \( U \) is the \emph{until} operator.
+Other standard temporal operations can be derived from the ones above such as the \emph{eventually} operator \( \Diamond\phi = \text{true}\; U \phi \) which states that ``eventually \( \phi \) will be satisfied'' and the \emph{always} operator \( \Box\phi = \lnot\Diamond\lnot\phi \) which states that ``\( \phi \) always holds.''
+
+How do we interpret LTL as a typing model for FRP?
+Jeffrey proposes such an interpretation, taking the type system of his FRP language to be an intuitionistic variant of LTL and typing the various standard combinators of FRP in his system~\cite{jeffrey2012}.
+For example, Jeffrey proposes the following type for the \lstinline!constant! combinator which transforms a signal into a constant value:
+\[
+  \forall \{A, B \} \llbracket \square B \Rightarrow A \rhd B \rrbracket.
+\]
+This type says that \lstinline!constant! is a function whose input is a type $B$ that is globally true ($\square$), \ie, true at all times and the output is a type $A \rhd B$, a \emph{decoupled function} whose output value $B$ at some time depends on a history of inputs but \emph{not} on $A$'s value at that time.
+This richer type expresses \emph{temporal} and (non-)\emph{dependence} properties between $A$ and $B$, something that \lstinline!constant!'s original type---\lstinline!b -> SF a b! did not capture\footnote{%
+  The type signature of \lstinline!constant! comes from the Yampa FRP library.
+  Here, \lstinline!SF a b! is the type of \emph{signal functions} that map from \lstinline!Signal a! to \lstinline!Signal b!.
+}.
+
+This project will explore extending the basic FRP model for CRNs with a rich type system based on LTL for specifying correctness properties.
+We will do this by following Jeffrey's lead and begin by exploring how we can use LTL to type the combinators we've identified for CRNs.
+For example, we might decide to precisely define the type produced by our \lstinline!min! combinator.
+One possibility for defining this type would be the LTL formula \( \phi_1 \land \phi_2 \) where \( \phi_1 \) and \( \phi_2 \) are defined by
+\begin{align*}
+  \phi_1 &= [x_1(0) > x_2(0)]\rightarrow\Diamond\Box[y = x_2(0)]\\
+  \phi_2 &= [x_1(0) < x_2(0)]\rightarrow\Diamond\Box[y = x_1(0)].
+\end{align*}
+This formula simply states that if \( X_1 \) has the initial majority over \( X_2 \), then \( Y \) will eventually converge to \( X_2 \).
+Similarly, if \( X_2 \) has the initial majority, then \( Y \) will eventually converge to \( X_1 \).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Software Support for Functional Reactive CRNs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The two primary objectives of the proposed research are to develop a high-level functional reactive programming language for chemical reaction networks, along with an associated type system inspired by linear temporal logic.
+To assess the effectiveness of this novel FRP approach to molecular programming, this project will also produce software tools to assist in the development process.
+This includes a software library for translating high-level FRP constructs into their associated low-level CRNs as well as preliminary development environment tools that help facilitate the FRP development process and perform static type checking.
+These tools will enhance productivity on the proposed research by providing quick feedback on the viability of preliminary programming constructs and ideas.  These tools will also provide the means to visualize, analyze, and understand the execution of these constructs in a systematic and realistic environment.
+Such software programs and tools are critical to assist in understanding and developing a reactive chemical reaction network language that is useful and correct. 
+
+PI Klinge and four undergraduate students at Grinnell College during the summer of 2017 researched and developed a prototype integrated development environment (IDE) for deterministic chemical reaction networks named \emph{Cauldron}.
+PI Klinge and PI Lathrop subsequently, along with undergraduate students from both institutions, continued the project the following summer.
+Cauldron incorporated fully-automatic extension operators~\cite{oKlin16} into the CRN development workflow that incrementally extends a CRN in a modular way.
+The Cauldron IDE allows users to enter, compose, store, retrieve, and simulate chemical reaction networks, and provides a basic library of useful extension operators and CRN modules.
+Although the modular extension operators supported by Cauldron yield perfectly precise ways to combine signals, the operations deviate from the massively parallel strengths that CRNs provide and are sensitive to initial conditions.
+
+Using work already completed in the Cauldron prototype for manipulating and simulating chemical reaction networks, the proposed research will retool Cauldron to create an integrated environment for developing functional reactive chemical programs.
+Any software tools created in support of the proposed research will be made available to the public within two years of the end of the proposed research end date. 
+
+
+%%%%%%%%%%%%%%%%%%%%
+
+%% TODO: integrate these preliminary bits into the prose above
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Typed Chemical Reaction Networks}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Deterministic chemical reaction networks (DCRNs) form a low-level \emph{assembly language} for molecular programming~\cite{cardelli2014}.
+%However, DCRNs carry all of the baggage of any such low-level language:
+%\begin{thoughts}
+  %\athought What are the general limitations and weaknesses of programming in an assembly language?
+%\end{thoughts}
+%On top of this, becase DCRNs are an analog form of computation, the development process faces different challenges.
+%For example, the output of DCRNs is a continuous-time, continuous-space, concentration signal.
+%Much of the design and development process of DCRNs involves specifying chemical species and reactions that when given some initial state, will generate a target chemical signal, \eg, a sine wave.
+%\begin{thoughts}
+  %\athought This particular idea doesn't seem directly connected to ``programmatic'' concerns.
+    %What the programmatic-specific concerns with the continuous-nature of DCRNs?
+%\end{thoughts}
+
+%In particular, we have identified the following needs when developing DCRNs:
+%\begin{enumerate}
+    %\item An array type so that arrays of species and reactions can be created, \eg, \( \{X_1, \ldots, X_n\} \).
+    %\item Mutable and immutable species to guarantee safe composition of two DCRNs where one is emitting a signal to be used by another
+    %\item Higher-order procedures that can take DCRNs as parameters and return DCRNs in order to support arbitrary extension operations like the ones described above
+    %\item Parameterizing DCRNs so that they can be instantiated with various controlled changes. For example, it is common to use a \emph{ladder} that is parameterized by some integer \( n \) that is the DCRN of the form:
+    %\begin{align*}
+        %L_i + F &\goesto{} L_{i+1} + F\text{ for all }i\in\{0, \ldots, n-1\}\\
+        %L_i + B &\goesto{} L_0 + B\text{ for all }i\in\{1, \ldots, n\}
+    %\end{align*}
+    %\item An ability to have DCRNs be composed of multiple copies of other DCRNs, such as an SR latch consisting of two NAND gates, and enforce compatibility of species types and mutability / immutability properties when connecting them together.
+%\end{enumerate}
+
+%To alleviate these burdens, we propose an extended CRN model equipped with a static type system that captures these constraints.
+%\begin{thoughts}
+  %\athought Two ways we can go here: a systems community would expect some examples that highlight, a PL commuity would expect a basic type system and semantics.
+    %Which should we go with here?
+%\end{thoughts}
+
+%There are a variety of known techniques for manipulating chemical signals.
+%For example, given a DCRN that generates a signal \( x(t) \) using a species \( X \), it is well known how to extend that DCRN to include a species that generates the signal \( y(t) = e^{x(t)} \) using some species \( Y \).
+%In other words, the DCRN-generable functions are known to be \emph{closed} under various operations such as exponentiation, multiplication, addition, logarithms, and many more~\cite{oKlin16}.
+%Therefore, it is possible to generate a signal of the following form simply by repeatedly applying the extension procedures defined by these closure properties:
+%\[
+    %z(t) = 1 + e^{x(t)y(t)} + \log(1 + t).
+%\]
+
+%Other applications of DCRNs involve computing a specific value in the limit.
+%For example, trying to compute a particular function of an initial concentration or simply trying to compute a real-number such as \( \pi \) as the limit of some species \( \lim_{t\rightarrow\infty} x(t) \).
+%Techniques for computing these numbers also include extending DCRNs in controlled ways to maintain some guarantee that the signal \( x(t) \).
+%For example, in~\cite{rtcrn2}, the authors compute the number \( \frac{\pi}{4} \) in real time by constructing a CRN to generate the signal
+%\[
+    %x(t) = \text{arctan}\left(1-e^{-t}\right),
+%\]
+%using similar DCRN extension properties.
+
+%Similar to traditional programming, deterministic CRNs are also commonly composed together to perform more complicated computations.
+%Although modern programming languages enjoy concepts of abstraction to decompose procedures into reusable parts, DCRNs enjoy no such features.
+%In~\cite{rdc}, the authors design a chemical NAND gate that can be composed to construct any Boolean circuit and even show it can be used to construct circuit sequential circuits such as an SR latch.
+%However, no language features of DCRNs exist to help facilitate the process of reusing the design of a chemical NAND gate to produce a chemical SR latch.
+
+
+%%%%%
+
+%Many complex DCRN systems are designed specifically to respond to various ``pulses'' of molecules from another component or biochemical device.
+%\todo{Using a D latch as an example first might be better than jumping immediately into NFAs---especially since these NFAs can be implemented using D latches.}
+%For example, in~\cite{oKlLaLu15}, the authors implement non-deterministic finite automata (NFA) using input/output deterministic chemical reaction networks (I/O CRNs).
+%The sequence of symbols to an NFA are provided to the CRN via a sequence of \emph{pulse events}.
+%In particular, the input alphabet of the NFA is encoded as a set of species in the CRN and the input string given to the NFA is encoded as a concentration signal consisting of a sequence of pulses corresponding to the order of the symbols in the input string.
+%The design of the I/O CRN implementing the NFA processes each symbol \( a\in\Sigma \), one at time, and adjusts its state according to the NFA's transition function \( \delta:Q\times\Sigma\rightarrow Q \).
+
+%An I/O CRN representing an NFA can be considered a molecular program that receives an input signal, \ie, a sequence of symbol events \( \sigma = (a_0, a_1, a_2, \ldots) \), and then outputs a signal consisting of a sequence of state change events \( \tau = (q_0, q_1, q_2 \ldots )\) where for \( i > 0 \) the state \( q_i = \delta(a_{i-1}, a_{i-1}) \) is computed according to the NFA's transition function \( \delta \).
+%Here, the events \( a_i \) and \( q_i \) represent ``pulse events'' that mean a species \( X_{a_i} \) corresponding to symbol \( a_i \) or a species \( Y_{q_i} \) transitions from low to high concentration for a specified amount of time.
+
+%The behaviors of these I/O CRNs can be described using temporal logic such as \emph{signal temporal logic} (\emph{STL}).
+%For example, the STL formula \( \phi \) defined by
+%\[
+    %\phi \equiv \Box\left(a\text{-event} \rightarrow \Diamond_{\le\epsilon}\left[q \leftarrowtail \delta(q,a)\right]\right),
+%\]
+%states that whenever an \( a \)-event occurs, it must be the case that within \( \epsilon \) time, the state of the NFA must update according to the NFA's transition function.
+
+%Even the statements \( a \)-event and \( q \) could be written in terms of STL syntax.
+%For example, an \( a \)-event is simply an interval in which the species \( X_a \) has concentration 1 and all other species \( X_b \) corresponding to symbols \( b\in\Sigma\setminus\{a\} \) have concentration 0.
+%Similarly, the state of the I/O CRN is \( q\in Q \) exactly when species \( Y_q \) has concentration 1 and all other species \( Y_{q'} \) for \( q' \in Q\setminus\{q\} \) have concentration 0.
+
+%Text needs to go here about the benefits of expressing these types of DCRNs in an FRP language...
+
+%Text needs to go here about what this language will look like and some simple DCRNs that can be expressed in it as motivating examples...

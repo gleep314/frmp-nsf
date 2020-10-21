@@ -1,0 +1,96 @@
+\documentclass[11pt]{article}
+\input{../../preface/includes.tex}
+\input{tex/contact-info}
+\usepackage{natbib}
+\usepackage{bibentry}
+
+\NewDocumentEnvironment{pjob}{mmmm }
+{
+    \begin{tabular}{p{0.75\linewidth}p{0.25\linewidth}}
+        % \begin{itemize}{\setlength{\leftmargin}{0.25in}}
+        {\bf#2}, #1 & \emph{#3}\\
+        #4
+        % \end{itemize}
+}
+{
+    \end{tabular}
+    \vspace{1ex}
+}
+
+
+\begin{document}
+
+    \input{tex/header}
+    \input{tex/education}
+    \input{tex/appointments}
+
+    \nocite{rbfa,cEHKLLL14,cLLLKHM12,cLLLKMS12}
+    \nobibliography{resources/publications}
+
+    \input{tex/project_related_publications}
+    \input{tex/other_significant_publications}
+    \input{tex/synergistic_activities}
+
+    % \setcounter{page}{1}
+    % \def\title{Biographical Sketch:~Titus~H.~Klinge}
+    % \input{../preface/title}
+
+    % \section{Education}
+    % \begin{itemize}
+    %     \item \textbf{Undergraduate Institution}
+    %     \begin{itemize}
+    %         \item Iowa State University (Ames, IA)
+    %         \item B.S. in Computer Science, 2011
+    %     \end{itemize}
+    %     \item \textbf{Graduate Institution}
+    %     \begin{itemize}
+    %         \item Iowa State University (Ames, IA)
+    %         \item Ph.D. in Computer Science, 2016
+    %     \end{itemize}
+    % \end{itemize}
+
+    % \section{Publications}
+    % \subsection{Project-related publications}
+    % \begin{itemize}
+    %     \item RBFA
+    %     \item NANOCOM 2016
+    %     \item RDC
+    %     \item DNA 2019
+    %     \item TOSEM
+    % \end{itemize}
+
+    % % A list of:
+    % % - up to five products most closely related to the proposed project; and
+    % % - up to five other significant products, whether or not related to the proposed project.
+
+    % \subsection{Other significant publications}
+    % \begin{itemize}
+    %     \item ASE
+    %     \item RE
+    %     \item ICSE
+    %     \item RTCRN
+    %     \item SIGCSE
+    % \end{itemize}
+
+    % % Each product must include full citation information including (where applicable and practicable) names of all authors, date of publication or release, title, title of enclosing work such as journal or book, volume, issue, pages, website and URL or other Persistent Identifier.
+
+    % \section{Synergistic Activities}
+    % \begin{itemize}
+    %     \item Mentoring students at Carleton / Iowa State on CRN-TAM stuff
+    %     \item Mentor four students summer 2017 building a software simulator prototype
+    %     \item Workshop at Simpson
+    %     \item Workshop at ASE
+    %     \item Taught MP courses at Grinnell and Carleton with diverse populations of students
+    % \end{itemize}
+
+    % A list of up to five examples that demonstrate the broader impact of the individual's professional and scholarly activities that focuses on the integration and transfer of knowledge as well as its creation. Examples could include, among others:
+    % - innovations in teaching and training 
+    %   (e.g., development of curricular materials and pedagogical methods);
+    % - contributions to the science of learning;
+    % - development and/or refinement of research tools; 
+    % - computation methodologies and algorithms for problem-solving; 
+    % - development of databases to support research and education; 
+    % - broadening the participation of groups underrepresented in STEM; and 
+    % - service to the scientific and engineering community outside of the individual’s immediate organization.
+
+\end{document}

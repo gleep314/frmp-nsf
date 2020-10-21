@@ -1,0 +1,104 @@
+%!TEX root = project_description.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{High-Level Techniques for Molecular Programming}
+\label{sec:proposed_work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Preamble goes here...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Temporal Logics for Molecular Program Specification}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\todo{Consider moving this to preliminaries section?}
+
+We probably want to discuss temporal logic as a whole and this book seems to be heavily cited when discussing history of TL~\cite{pnueli1997,manna2012temporal}.
+
+\textbf{Linear Temporal Logic}
+Overview of LTL goes here and variants that are applicable to SCRNs
+
+\textbf{Signal Temporal Logic}
+Overview of STL goes here and aspects that are relevant to DCRNs.
+Here are some relevant papers:~\cite{donze2010,donze2013,donze2015}.
+Also, Donz\'{e} wrote a MATLAB library for STL:~\cite{breach}.
+
+Something to also look into is~\cite{donze2012} which defines a logic TFL \emph{Time Frequency Logic} which deals with time-shifts.
+It was specifically designed to recognize musical pieces.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Linguistic / Type Hinting / Suggestions / Static Analysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\todo{PM, I am not sure what to call this section}
+This is a PM section about other approaches to guide CRN development.
+We have discussed introducing typing of signals between CRN modules, suggest reactions based on the given requirement and types you are working with, static analysis to find bad programming practices, \etc.
+
+Our program-synthesis approach needs to be sufficiently different than~\cite{cardelli2017,phillips2018}.
+
+\subsubsection{Typed Chemical Reaction Networks}
+
+\begin{itemize}
+  \item If CRNs are the ``assembly language of chemistry'', we can consider adding types to CRNs to enforce safety properties.
+  \item Typed assembly languages~\cite{morrisett1998} extend conventional assembly languages with a type system and
+  \item TALs allow us to perform type-preserving translation from a higher-level language to the assembly language.
+    In the original TAL work, this allowed the authors to enforce the safety properties of high-level language constructs through compilation.
+  \item If we adapt this concept to CRNs to create a typed CRN language (TCRN), we would need to (a) define a set of safety properties we want to preserve about well-formed CRNs, (b) a type system that captures these properties, and (c) a higher-level ``source'' language that the TCRN would be the target of.
+  \item We could also explore how programming in the TCRN model directly is more beneficial.
+\end{itemize}
+
+\subsubsection{Functional Reactive Programming and Linear Temporal Logic}
+
+\begin{itemize}
+  \item If LTL are used to verify properties of CRNs, then Curry-Howard suggests we can build a high-level language directly from LTL.
+  \item Jeffrey posits that the corresponding programs for a type system built from LTL are based in functional reactive programming~\cite{jeffrey2012}.
+  \item This immediately suggests that we ought to try designing CRNs using so-called reactive types (elements of \( \mathsf{Time} \rightarrow \mathsf{Set} \)).
+  \item Here, we would need to explore (a) how do the high-level FRP primitives map onto CRNs, (b) how do the properties of CRNs in LTL align with the LTL-as-types interpretation, and (c) what meta-theoretic guarantees about CRNs does this language-and-type system give us?
+\end{itemize}
+
+\emph{%
+  (Whew, that's a pretty big research agenda already!  Those are two big-ticket items I think would take at least one year a piece to work through.
+  But the good news is that we can consider synthesizing programs in our higher-level FRP language of which there is prior work to build upon!~\cite{finkbeiner2019}
+  That would be a \emph{very} full three-year agenda, in my opinion.  Good thing?)
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Automatic Molecular Program Extensions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Is this the correct term?
+This is the section for all the old Cauldron results for simplifying molecular program development.
+In particular, using design patterns and templates to generate and extend programs in a controlled way.
+Helps automate the process of using common techniques like \emph{dual-railing} molecules or using extension operators to take a signal in as input and produce the square of the signal, \etc.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Serious Games}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+This is a Jim section.
+We can discuss our ideas for games that generate CRNs, tests, and counterexamples that satisfy a requirement, give confidence in its correctness, or prove that a certain design fails.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Assessment: Automatic Molecular Program Synthesis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This is where we might discuss how good our techniques are by comparing them to brute-force and genetic programming approaches
+
+\subsubsection{Distance Measures}
+A prerequisite to discussing brute-force search and genetic programming techniques is the clear definition of a \emph{distance measure} or \emph{utility function} that can be used to compare two given solutions on how close they are to achieving the specified requirement.
+Given two time-varying signals, a common distance measure is a supremum norm \( |f-g| \) that is defined by the supremum of \( |f(t) - g(t)| \) where \( |f(t)| \) is the Euclidean norm on \( \mathbb{R}^n \).
+We could use a similar distance measure except define our distance measure as the infimum distance from \( f \) to some \( g \) that satisfies the formula.
+
+One drawback of the above idea for a distance measure is that some signals are nearly identical except they are \emph{time-shifted} versions of each other.
+Thus it is possible for two functions to be ``far apart'' in the Euclidean measure above but actually extremely close if time was shifted by some small \( \epsilon \).
+We should consider also exploring distance measures that account for these time shifts.
+
+An important thing we will want to take into account is how efficiently these measures can be computed.
+For a brute-force and/or genetic programming solution to work, comparing a CRN to a temporal logic requirement will need to be as efficient as possible.
+
+\subsubsection{Brute-Force Search}
+Here we can discuss the approach of enumerating all small CRNs to try to find one that satisfies the requirement.
+If rate constants and initial conditions are rationals instead of real-valued, the number of CRNs is countably infinite and can be enumerated using dove-tailing.
+We could discuss approaches for searching through all possible CRNs and use some pruning techniques to eliminate large portions of the search space here.
+In particular, each CRN would need to have the appropriate input species and output species that are used in the logic specification.
+Similarly, there might be some requirements in the temporal logics that allow us to prune.
+Furthermore, there might be other constraints, such as trying to keep all reactions in a bimolecular form, and the fact that there are infinitely many identical CRNs that are only different by rate constants that just affects their time-efficiency by a constant.
+
+\subsubsection{Genetic Programming}
+Here we can discuss approaches we have for using random mutations and crossovers to converge on a CRN that is close to satisfying the requirement.
+We could also skip this entirely.
+
+If we do go this route, we would need to discuss why our approach is different than~\cite{Koza2007,hii2014utilizing,Tsuchiya2001,cardelli2017,phillips2018}.
