@@ -9,7 +9,6 @@
 \usepackage{amssymb}
 \usepackage{stmaryrd}
 \usepackage{graphicx}
-% \usepackage{titlesec}
 \usepackage[margin=1in]{geometry}
 \usepackage{subcaption}
 
@@ -18,27 +17,23 @@
 \newcommand{\eg}{e.g.\@\xspace}
 
 \makeatletter
-\newcommand*{\etc}{%
-    \@ifnextchar{.}%
-        {etc}%
-        {etc.\@\xspace}%
+\newcommand*{\etc}{
+    \@ifnextchar{.}
+        {etc}
+        {etc.\@\xspace}
 }
 \makeatother
 
 \makeatletter
-\newcommand*{\etal}{%
-    \@ifnextchar{.}%
-        {et al}%
-        {et al.\@\xspace}%
+\newcommand*{\etal}{
+    \@ifnextchar{.}
+        {et al}
+        {et al.\@\xspace}
 }
 \makeatother
 
-% \titleformat{\subsubsection}[runin]{\normalfont\large\bfseries}{\thesubsubsection}{1em}{}[]
-
 \usepackage[textsize=scriptsize]{todonotes}
 
-% \newlength{\arrow}
-% \settowidth{\arrow}{\scriptsize$1000$}
 \newcommand*{\goesto}[1]{\xrightarrow{#1}}
 \newcommand*{\Xbar}{\overline{X}}
 \newcommand*{\xbar}{\overline{x}}

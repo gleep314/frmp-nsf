@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\input{../../preface/includes.tex}
+\input{tex/contact-info}
+\usepackage{natbib}
+\usepackage{bibentry}
+
+\NewDocumentEnvironment{pjob}{mmmm }
+{
+    \begin{tabular}{p{0.75\linewidth}p{0.25\linewidth}}
+        % \begin{itemize}{\setlength{\leftmargin}{0.25in}}
+        {\bf#2}, #1 & \emph{#3}\\
+        #4
+        % \end{itemize}
+}
+{
+    \end{tabular}
+    \vspace{1ex}
+}
+
+
+\begin{document}
+
+    \input{tex/header}
+    \input{tex/education}
+    \input{tex/appointments}
+
+    % \nocite{rbfa,cEHKLLL14,cLLLKHM12,cLLLKMS12}
+    % \nobibliography{resources/publications}
+
+    \input{tex/project_related_publications}
+    \input{tex/other_significant_publications}
+    \input{tex/synergistic_activities}
+
+\end{document}
