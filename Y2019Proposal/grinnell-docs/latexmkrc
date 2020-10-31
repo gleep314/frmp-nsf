@@ -1,2 +1,0 @@
-@generated_exts = ('synctex.gz', 'thm', 'aux', 'fls', 'out', 'bbl');
-$bibtex_use = 2;
