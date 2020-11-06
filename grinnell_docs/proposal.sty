@@ -1,0 +1,129 @@
+\ProvidesPackage{proposal}
+
+\newcommand{\tags}{Collaborative Research:FET:Medium:RUI}
+\newcommand{\thegrant}{Functional Reactive Programming for Molecular Systems}
+
+% Workaround: amsmath must be loaded before unicode-math
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage[
+  math-style=ISO,
+  bold-style=ISO,
+  partial=upright,
+  nabla=upright
+]{unicode-math}
+\usepackage[english]{babel}
+
+\usepackage{enumitem}
+\setlist{nosep}
+
+\usepackage{framed}
+\usepackage{graphicx}
+\usepackage{microtype}
+
+\usepackage[amsmath, amsthm, thmmarks]{ntheorem}
+\newtheorem{lemma}{Lemma}
+
+\usepackage{pbox}
+\usepackage{tabu}
+\usepackage{wrapfig}
+\usepackage[svgnames]{xcolor}
+\usepackage{xspace}
+
+\usepackage[
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in,
+  includefoot,
+  paperwidth=8.5in,
+  paperheight=11in
+]{geometry}
+
+\usepackage{hyperref}
+\hypersetup{%
+  pdftitle={\thegrant---\thedoc},
+  pdfauthor={Peter-Michael Osera},
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  hidelinks,
+  naturalnames=true,
+  pdfstartview=Fit,
+  pdfpagemode=UseOutlines,
+  pdfpagelayout=TwoPageRight,
+  unicode=true
+}
+
+\usepackage{fancyhdr}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+
+\fancyhf{}
+\fancyfoot[L]{%
+  {\footnotesize{Osera, Grinnell College, \textsc{\tags}: \emph{\thegrant}---\emph{\thedoc}}}
+}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%%%%% Text Macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\eg}{\emph{e.g.}\xspace}
+\newcommand{\ie}{\emph{i.e.}\xspace}
+\newcommand{\etc}{\emph{etc.}\xspace}
+\newcommand{\etal}{\emph{et\ al.}\xspace}
+
+\newcommand{\myth}{\textsc{Myth}\xspace}
+\newcommand{\mythtwo}{\textsc{Myth2}\xspace}
+\newcommand{\scout}{\textsc{Scout}\xspace}
+\newcommand{\scythe}{\textsc{Scythe}\xspace}
+\newcommand{\scythetwo}{\textsc{Scythe2}\xspace}
+\newcommand{\thefoundations}{\textsc{Synth(X)}\xspace}
+\newcommand{\hmx}{HM(\( X \))\xspace}
+\newcommand{\clpx}{CLP(\( X \))\xspace}
+\newcommand{\outsideinx}{OutsideIn(\( X \))\xspace}
+
+\newcommand{\todo}[1]{{\color{red}(\emph{TODO}: #1)}}
+
+\newcommand{\largetitle}{%
+  \begin{center}
+    {\normalfont\Large\bfseries\textsc{{\tags}:}\thegrant} \\
+    {\large\itshape\thedoc} \\
+  \end{center}
+}
+
+\newcommand{\smalltitle}{%
+  { \noindent\Large\bfseries {\tags}: \thegrant } \\
+  { \noindent\large\itshape\thedoc } \\
+}
+
+\definecolor{shadecolor}{named}{LightGray}
+\newenvironment{rqcallout}[1]{%
+  \begin{shaded}
+  \noindent\textbf{Research Question {#1}:}
+}{\end{shaded}}
+
+% Making \paragraph not take up so much space
+% (Also, no longer a distinguished section; careful!)
+\makeatletter
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}% was 3.25ex...
+  {\z@}{1.00ex \@plus 1ex \@minus .2ex}{-1em}%
+  {\normalfont\normalsize\bfseries}%
+}
+\makeatother
+
+%%%%% Math Macros %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\bnfalt}{\;\mathrel{\mid}\;}
+\newcommand{\bnfdef}{%
+  \mathrel{\!\colon\!\!\colon\!\mathord{=}}%
+}
+\newcommand{\many}[2]{%
+  \ensuremath{\overline{#2}^{#1}}
+}
+\newcommand{\kwd}[1]{\ensuremath{\mathbf{#1}\xspace}}

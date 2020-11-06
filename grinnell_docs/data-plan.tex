@@ -1,0 +1,46 @@
+\documentclass[11pt]{article}
+
+\newcommand{\thedoc}{Data Plan}
+
+\usepackage{proposal}
+
+\begin{document}
+
+\smalltitle{}
+
+\section*{Types of Data}
+
+This project will generate the following types of data:
+\begin{enumerate}
+  \item \textbf{Reports of research results}, primarily in the form of conference papers but also in summarized forms such as blogs and social media posts.
+  \item \textbf{Software artifacts and associated source code} that realize the theories and techniques developed during the project.
+  \item \textbf{User study results} such as surveys, polls, and interviews.
+    This data is sensitive in nature and appropriate measures will be taken to safeguard them as recommended by the PI's institutional review board.
+  \item \textbf{Pedagogical materials} for use by other educators.
+\end{enumerate}
+
+\section*{Data Formats}
+
+In all cases, we will use standard text-based formats for storing data, in particular, plain text for source code in various programming languages and user study results and HTML and PDFs for published reports, blog posts, and pedagogical materials.
+
+\section*{Policies for Access, Sharing, Re-use, and Re-distribution}
+
+For the types of data identified above:
+\begin{enumerate}
+  \item \textbf{Research reports} will be published through standard conference venues and journals as appropriate.
+    Whenever possible, reports will be published with open access licenses and pre-print versions of the reports will be made freely available on arXiv.org as well as the PI's website.
+  \item \textbf{Software artifacts and source code} will be released to the public with free, open licenses to allow for maximal re-use by other researchers.
+    These artifacts will be hosted on public source code repository sites, \eg, Github.
+    In addition, containers/virtual machines with these artifacts will also be released and hosted on the PI's website so that the artifacts
+  \item \textbf{User study results} will be stored on secure data servers hosted by the PI's institution.
+    When appropriate, user study results will be anonymized and then released with free, open licenses alongside research reports to aid future researchers in reproduction of the studies.
+  \item \textbf{Pedagogical materials} will also be released under free, open licenses to allow for maximal re-use by other educators.
+\end{enumerate}
+
+\section*{Plans for Data Archiving}
+
+Publicly-released data will be hosted on stable public archival sites appropriate for the medium, \eg, Github for source code and publicly available data and arXiv.org for report pre-prints.  To avoid bit rot of software artifacts, virtual machines in the Open Virtualization Format (OVF) containing the artifacts will also be released.
+These data will also be available on the PI's website.
+Sensitive data such as user study results will be archived in secure, encrypted, servers on-site of the PI's institution.
+
+\end{document}
