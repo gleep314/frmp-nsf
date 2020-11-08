@@ -1,0 +1,256 @@
+%!TEX root = project_description.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%
+\todo{Add references to relevant 2020 papers}
+Molecular programming harnesses the reactivity of molecules to perform directed computations at the nanoscale.
+Leonard Adleman was the first to demonstrate the feasibility of molecular programming by solving instances of the Hamiltonian path problem with DNA biomolecules and common enzyme reactions~\cite{adleman94}.
+Since Adleman's initial work, molecular programming techniques have rapidly progressed.
+Today, virtually any two- or three-dimensional nanostructure can be compiled into biomolecules that spontaneously self-assemble the target structure with nanometer precision~\cite{jRoth06,jDDLHGS09,jDMTVCS09,jKOSY12,benson2015dna,Juneaav0655}.
+Specific biomolecules such as DNA are also being explored for data archival purposes because of their longevity, information density, and rapidly decreasing synthesis costs~\cite{jChGaKo12,jGBCDLSB13,hughes17}.
+Molecular programming techniques are also employed to construct dynamic molecular machines for transporting nanoscale cargo~\cite{jShiPie04,jDoBaCh12,jWoodsQian17} as well as amorphous molecular computations that naturally interface with existing biological systems~\cite{cKiHoWi05,jQiaWin11a,jCDSPCS13}.
+
+The underlying theory of molecular programming is also rapidly advancing and helping to inform the experimental results.
+Erik Winfree's tile self-assembly model~\cite{oWinf98,jWeDaYi12,qian17} sparked the interest of many computer scientists in 1998 and is still an actively investigated model today~\cite{jLaLuSu09,cDLPSW10,jMeunier17,cFuSuWe19}.
+One of the most prominent models of molecular programming is the chemical reaction network, which is a mathematical abstraction of chemical kinetics used for over a half century~\cite{jAris65}.
+Chemical reaction networks are a natural bridge between the theory and practical applications of molecular programming.
+In theory, they are algorithmically universal~\cite{jSCWB08,cFLBP17} and can be automatically compiled into concrete DNA molecules that simulate their behavior with arbitrary precision~\cite{cSoSeWi09,jLYCP12,jCard13,jCDSPCS13,jSPSWS17,cBSJDTW17}.
+As a result, chemical reaction networks are regarded as a prescriptive programming language for deploying algorithms at the nanoscale~\cite{jSCWB08,cSWBG19,jHKLLL18,rdc}.
+\todo{Add a sentence here that makes the broader impact of CRN research clear}
+
+Roughly, a chemical reaction network (CRN) is a collection of \emph{reactions} over a finite set of abstract molecule types called \emph{species}.
+Depending on the target environment, a CRN is either modeled stochastically or deterministically.
+Stochastic CRNs are used for modeling molecular reactions in small-volume environments such as \emph{in vivo} experiments and are equivalent to well-known discrete models of computation such as vector addition systems~\cite{oGins66,jKaMiWi67,jKarMil69,jNash73,jLero10,cLero12} and Petri nets~\cite{oPetr62,jMura89,oDavAll10,oReis13}.
+Deterministic CRNs are used to model chemical reactions in large-volume environments and are equivalent to Shannon's general purpose analog computer~\cite{jShan41,jGraCos03,jGrac04,cBoGrPo16,cFLBP17,rtcrn2}.
+
+Molecular computation is significantly different from classical computing models and has various advantages and disadvantages.
+For example, stochastic CRNs can be regarded as massively parallel distributed computing systems and are closely related to population protocols~\cite{jAADFP06,jAAER07,jAnAsEi08,jAnAsEi08a,Doty2018}.
+Their probabilistic nature is being harnessed to simulate arbitrary probability distributions and deploy probabilistic algorithms at a nanoscale~\cite{jCaKwLa18,jCOAW19,cWinfe19}.
+In fact, the probabilistic semantics of stochastic CRNs is necessary for Turing-powerful computation; only semi-linear functions can be computed with probability 1~\cite{cChDoSo12,cCuDoSo14,Doty2015,doty19}.
+Programming with molecular reactions also enables programmers to seamlessly interface complex decision processes with existing biological systems, and various cell-to-cell molecular communication protocols are actively being investigated~\cite{jPieAky10,jFYECG16,jChou19}.
+Although current methods for molecular programming are not expected to surpass silicon processing inefficiency, the techniques have the potential to broadly impact biomedicine research~\cite{jorge2018overview}.
+
+The unique nature of molecular computation introduces new challenges for programmers.
+Molecular reactions are \emph{always active}, which makes even simple sequential tasks challenging to achieve without significant overhead.
+Moreover, combining two molecular programs can lead to unexpected interactions, race conditions, and other unwanted side effects.
+For example, consider the CRNs from Figure~\ref{fig:min_max_example} (a) and (b) that compute the \( \min(x_1, x_2) \) and \( \max(x_1, x_2) \) functions, respectively.
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.23\textwidth}
+        \centering
+        \begin{minipage}[t][1.5in][b]{0.23\textwidth}
+            \vspace*{\fill}
+            \[
+                X_1 + X_2 \goesto{} Y
+            \]
+            \vspace*{\fill}
+        \end{minipage}
+        \vspace*{-1.5em}
+        \caption{}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[t]{0.23\textwidth}
+        \centering
+        \begin{minipage}[t][1.5in][b]{0.23\textwidth}
+            \vspace*{\fill}
+            \begin{align*}
+                X_1 &\goesto{} A_1 + Y\\
+                X_2 &\goesto{} A_2 + Y\\
+                A_1 + A_2 &\goesto{} B\\
+                Y + B &\goesto{} \emptyset
+            \end{align*}
+            \vspace*{\fill}
+        \end{minipage}
+        \vspace*{-1.5em}
+        \caption{}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[t]{0.23\textwidth}
+        \centering
+        \begin{minipage}[t][1.5in][b]{0.23\textwidth}
+            \vspace*{\fill}
+            \begin{align*}
+                X_1 &\goesto{} A_1 + Z\\
+                X_2 &\goesto{} A_2 + Z\\
+                A_1 + A_2 &\goesto{} B\\
+                Z + B &\goesto{} \emptyset\\
+                X_3 + Z &\goesto{} Y
+            \end{align*}
+            \vspace*{\fill}
+        \end{minipage}
+        \vspace*{-1.5em}
+        \caption{}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[t]{0.23\textwidth}
+        \centering
+        \begin{minipage}[t][1.5in][b]{0.23\textwidth}
+            \vspace*{\fill}
+            \begin{align*}
+                X_1 &\goesto{} A_1 + Z\\
+                X_2 &\goesto{} A_2 + Z\\
+                A_1 + A_2 &\goesto{} B\\
+                Z + B &\goesto{} \emptyset\\
+                X_3 + Z &\goesto{} Y + W\\
+                Y + W + B &\goesto{} X_3
+            \end{align*}
+            \vspace*{\fill}
+        \end{minipage}
+        \vspace*{-1.5em}
+        \caption{}
+    \end{subfigure}
+    \caption{\label{fig:min_max_example}
+        (a) Computes \( y = \min(x_1, x_2) \), (b) computes \( y = \max(x_1,x_2) \), (c) attempts to compute \( y = f(x_1, x_2, x_2) \) but fails, (d) correctly computes \( y = f(x_1, x_2, x_3) \).
+    }
+\end{figure*}
+The minimum function proceeds by consuming \( X_1 \) and \( X_2 \) molecules until the smaller of the two reactants is completely consumed; the minimum of the two reactants is then produced directly as a result.
+In contrast, the maximum function proceeds by computing the sum of reactants $X_1$ and $X_2$ in product $Y$ and then subtracting the minimum of the two reactants (stored in $B$) from $Y$.
+
+In isolation, each CRN correctly computes its respective function, storing its result in species \( Y \).
+However, composing the CRNs together to compute a compound function such as
+\begin{equation}\label{eq:min_max_function}
+    f(x_1, x_2, x_3) = \min(\max(x_1, x_2), x_3)
+\end{equation}
+results in a race condition that causes the computation to fail.
+Figure~\ref{fig:min_max_example}(c) attempts to compute \( f(x_1, x_2, x_3) \) by composing the CRNs (a) and (b) directly.
+However, the reaction \( X_3 + Z \goesto{} Y \) prematurely consumes \( Z \)s before the maximum function stabilizes to its final value, causing failure.
+
+Resolving the race condition requires making the offending reaction reversible so that the unwanted side effects can be undone, as shown in Figure~\ref{fig:min_max_example}(d).
+Here, we form the composition of the two functions by combining the functions' respective CRNs but with some modifications.
+In addition to computing the minimum of $X_3$ and $Z$ directly as the product $Y$, we also generate a residual product $W$.
+This product is used in the final reaction in conjunction with the residual reactant $B$ from the maximum computation to restore any $X$s that were consumed prematurely.
+
+Composing CRNs together is only a safe operation if their outputs are produced in a non-decreasing manner~\cite{jCKRS18,doty19}.
+Because the output of \( \max(x_1, x_2) \) is produced using a subtraction operation, its output cannot be safely used in downstream computations without carefully ensuring that any reactions consuming its result are reversible.
+This reality stymies our attempts at building higher-level programming abstractions since these abstractions rely heavily on the composability of functionality.
+Moreover, CRNs are tightly coupled systems, and avoiding such unintended race conditions and side effects is challenging.
+Even in systems with only 20 reactions and four species, most species have a chain of dependencies that can be broken by the addition of a single reaction that affects one of its dependencies.
+For this reason, molecular programs defined using the CRN syntax are challenging to develop and debug.
+
+To solve these issues, researchers have investigated linguistic support for molecular programming.
+For example, Visual GEC \cite{jPedPhi09}, Visual DSD \cite{jLYPEP11}, and CRN++ \cite{khurshid2018} all define a language for specifying molecular programs.
+\todo{Add Cardelli's new CRN programming language here}
+Visual GEC is concerned with synthetic biology, and its language is based on promoters, ribosome binding sites, protein coding regions and terminators.
+Visual DSD is explicitly designed for specifying DNA strand displacement networks.
+While both of the languages defined in these tools work well for their domains, they provide low-level programming constructs the make the development difficult.
+Even with the help of tools, it is easy to make subtle mistakes in programs that may be intermittent and difficult to find and debug.
+In contrast, CRN++ is a high-level language that gives molecular programmers the ability to specify programs in a more familiar imperative style.
+The techniques used in this paper serialize computations in order to achieve this effect, which is a severe restriction on what is, otherwise, an inherently parallel system.
+\todo{Add discussion of Cardelli's paper here}
+
+In short, the prior work either (a) provides little support for programming rich, complex molecular systems, or (b) chooses abstractions that hide the essence of CRNs, trading ease of use by limiting their behavior.
+We instead recognize the inherent difficulties that CRN's unique computational behavior presents and choose instead to adopt abstractions that allow us to reason about this behavior in a direct, structured manner.
+To this end, we propose the construction of a foundations-based programming language for molecular programming based on \emph{functional reactive programming} (FRP), noting that a chemical reaction network is inherently \emph{reactive} in nature.
+Functional reactive programming is an established programming paradigm within the programming languages community that directly applies to the task of writing molecular programs.
+Furthermore, the analysis of functional reactive programming languages is also well-studied, giving us immediate in-roads for analyzing CRNs written with this language.
+\todo{Update summary of our proposed work to match new thrust of research}
+For example, Linear Temporal Logic (LTL)~\cite{pnueli1997,manna2012temporal,oBaiKat08} is frequently used to verify the correctness of CRNs~\cite{jKwiTha14,cEHKLLL14,jEKLLLM17}.
+By the Curry-Howard Isomorphism, we can view LTL as a type system for our FRP-based language for CRNs.
+In this system, whenever a CRN successfully typechecks, we know that it validates its corresponding LTL specification (the LTL specification \emph{is} its type).
+Other adaptations from the programming languages are also possible, \eg, program synthesis with LTL specifications~\cite{finkbeiner2019}, further demonstrating the power of this foundations-based approach.
+
+In summary, we propose the design and study of:
+\begin{enumerate}[itemsep=0pt]
+  \item The syntax and semantics of a \emph{functional reactive} programming language for chemical reaction networks.
+  \item A LTL-based type system for that functional reactive programming language.
+  \item Additional tool-based support for programming CRNs in this FRP style, including development environments and synthesis techniques.
+\end{enumerate}
+
+\todo{Add a paragraph outlining the rest of the proposal here}
+
+
+% Proposed outline of the rest of the paper
+%
+% 1. Introduction
+%     * Mostly stays the same
+%     * Proposed work has four main thrusts:
+%        A. Develop FRP languages for both deterministic and stochastic
+%           CRN models
+%        B. Enrich these languages with STL/LTL typing
+%        C. Explore a more advanced FRP approach to stochastic CRNs
+%           with signals Time -> Dist State and CSL typing
+%        D. Develop IDE tooling support that harnessees these language
+%           features, streamlines the development process, and performs
+%           static type verification
+%
+% 2. Functional Reactive Programming
+%     * Give background information about FRP while tying it into
+%       concepts of CRNs throughout
+%     * Arrow typeclass
+%     * Connections to temporal logics such as LTL, STL, etc.
+%
+% 3. FRP and Deterministic CRNs
+%     * Briefly introduce the input/output deterministic CRN model
+%     * Draw connections between between the previous works on
+%       chemical circuits and finite automata and FRP
+%     * In particular, emphasize how these CRNs are literally signal
+%       functions in the FRP sense that transform one type of signal
+%       into another
+%     * Drawing connections with how real biological systems use
+%       molecular communication and react to input signals changing
+%       such as the cell cycle switch
+%     * Overview Ally's work on deterministic CRNs, the IOCRN type,
+%       the Arrow implementations, and examples
+%     * Show how the NAND gate and S-R latch can easily be implemented
+%       in this characterization. Use the Yampa Arrow syntax to
+%       demonstrate how the S-R latch can be implemented using
+%       two NAND gates and the Arrow combinators
+%     * Emphasize how the Bool type encapsulates the idea of a dual
+%       rail encoding whereas the Double type is a continuous real
+%       valued signal
+%     * Discuss how STL (a continuous-space variant of LTL) is a natural
+%       choice for a type system. Give examples of how the requirements
+%       of the NAND gate and finite automata can be specified in STL
+%
+% 4. FRP and Stochastic CRNs
+%     * Briefly introduce the stochastic CRN model and constrast its
+%       unique qualities with the deterministic I/O CRN model
+%     * Discuss the multiple approaches that could be explored to
+%       provide language support for SCRNs, in particular, the deterministic
+%       function computation approach and the more general probability
+%       distribution approach
+%
+%     A. Leader-Directed Functional Programming
+%         * Draw connections to current literature on deterministic function
+%           computation, leader election, and Turing completeness results
+%           that often use leader molecules to direct the computation
+%         * Overview Bryce's work on stochastic CRNs, the SCRN type, the
+%           Arrow implementations, etc.
+%         * Show how the hailstone function can be easily implemented
+%           using FRP combinators
+%         * Explain how each stage of the computation may be compiled to
+%           have an arbitrarily low chance of failure
+%         * Contrast this approach with the IOCRN and how its inputs are
+%           consumed during the computation
+%         * Explain that leader-directed 
+%
+%     B. FRP and Probabalistic Signals
+%         * Emphasize how both stochastic CRNs are inherently probabalistic
+%           and how input signals are in reality, mapping time to a
+%           distribution of possible CRN states
+%         * Mention how the previously mentioned approach employs the leader
+%           method to precisely control the ordering of events. In contrast,
+%           biological systems oftem harness stochasticity to be a benefit
+%         * We propose to investigate a more general approach to employ FRP
+%           in this stochastic setting by regarding the signals of SCRNs to
+%           be signals of "probability distributions"
+%         * Since CSL is known to be a bisimulation for SCRNs, we will also
+%           explore how a CSL type system may be employed to reason about
+%           the complex abstractions of manipulating probability
+%           distributions through FRP combinators
+%
+% 5. Software Support for Functional Reactive Molecular Programming
+%     * This may not need its own section
+%     * Do not actually mention Cauldron
+%     * Just mention that we propose to create a deliverable that
+%       gives IDE tooling support for FRP in the MP context
+%
+% 6. Intellectual Merit
+%
+% 7. Broader Impacts
+%
+% 8. Timeline and Milestones
+%
+% 9. Results from Prior NSF Support
