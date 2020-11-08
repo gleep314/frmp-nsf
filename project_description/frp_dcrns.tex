@@ -5,10 +5,54 @@
 \label{sec:frp_dcrns}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Arguably the most well-known semantics for chemical reaction networks is \emph{deterministic}, where the molecular counts of each species is modeled as a continuously-varying concentration.
+Arguably the most prominent semantics for chemical reaction networks is \emph{deterministic mass action kinetics}, where the molecular counts of each species is modeled as a continuously-varying concentration.
 Moreover, these species concentrations evolve continuously according to a system of ordinary differential equations.
 Deterministic CRNs are inherently \emph{analog} and are closely related to Shannon's general purpose analog computer (GPAC) model (CITE).
-Traditionally deterministic CRNs and GPACs receive their input via an \
+\todo{CITE}
+Commonly, deterministic CRNs and GPACs receive their input via an \emph{initial state} (at time zero), process it, and present their output at some future time \( t \)---or even converge to the appropriate output as \( t \) approaches infinity.
+However, such machines can also be used as \emph{signal processors} that receive a continuously varying input signal and transform it in real time into a continuously varying output signal.
+This characterization of computation with deterministic CRNs is used in CITE \todo{CITE} to show that any nondeterministic finite automaton can be simulated in real time by a deterministic CRN.
+These CRNs receive their input strings as a sequence of \emph{pulses} and change its internal state in response to each input event.
+Each NFA simulating deterministic CRN is literally a signal combinator that, when given a sequence of pulses, produces its own sequence of pulses that encodes the current state transitions of the NFA while processing the signal.
+Many biological systems found in nature behave in a similar fashion, where when presented with a pulse of a specific molecule type, will react in some way.
+\todo{Fix this paragraph}
+Another example of using deterministic CRNs in this way is CITE \todo{CITE} which implements arbitrary combinational circuits that react in real time to their input signals and produce output signals in response according to traditional logic gates.
+
+Both of these examples, the NFA-simulating CRNs and the circuit-simulating CRNs, are literally \emph{signal functions} in functional reactive programming terms.
+We propose to develop a functional reactive language, embedded in Haskell, that captures this approach to molecular programming.
+A deterministic CRN would then be typed with \lstinline!DCRN a b! that is comparable to Yampa's signal function \lstinline!SF a b! so that it receives a time varying signal \lstinline!Time -> a! and produces a new signal \lstinline!Time -> b!.
+For example, the NAND gate CRN described above would have type:
+
+\begin{lstlisting}
+    nand :: DCRN (Bool, Bool) Bool
+\end{lstlisting}
+
+This says that \lstinline{nand} is a deterministic CRN that receives an input signal that encodes two Boolean values at all times and produces a new signal that is the conjunction of these two signals at all times \( t \).
+If the \lstinline{DCRN} type is an instance of Yampa's \lstinline{Arrow} and \lstinline{ArrowLoop} typeclasses, then it is possible to construct an S-R latch by combining two \lstinline{nand} CRNs together using the following syntax:
+
+\begin{lstlisting}
+    srlatch :: DCRN (Bool, Bool) Bool
+    srlatch = proc (sn, rn) -> do
+        rec q  <- ynand -< (sn, qn)
+            qn <- ynand -< (rn, q)
+        returnA -< q
+\end{lstlisting}
+
+The definition of \lstinline!DCRN! in our preliminary work is:
+\begin{lstlisting}
+    data DCRN a b = DCRN { reactions :: [Reaction]
+                         , inputs    :: Species a
+                         , outputs   :: Species b  }
+\end{lstlisting}
+where \lstinline!reactions! is a list of \lstinline!Reaction!s that store the reactants, products, and rate constant of each reaction, and where \lstinline!Species! is a parameterized type defined by
+\begin{lstlisting}
+    data Species a where
+        BoolSpecies   :: Name -> Name -> Species Bool
+        DoubleSpecies :: Name -> Species Double
+        PairSpecies   :: Species a -> Species b -> Species (a, b)
+\end{lstlisting}
+
+\todo{I am just rambling at this point. How much detail do we want to go into in the implementation of all this?}
 
 % 3. FRP and Deterministic CRNs
 %     * Briefly introduce the input/output deterministic CRN model
