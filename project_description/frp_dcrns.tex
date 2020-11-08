@@ -1,0 +1,34 @@
+%!TEX root = project_description.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{FRP and Deterministic CRNs}
+\label{sec:frp_dcrns}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Arguably the most well-known semantics for chemical reaction networks is \emph{deterministic}, where the molecular counts of each species is modeled as a continuously-varying concentration.
+Moreover, these species concentrations evolve continuously according to a system of ordinary differential equations.
+Deterministic CRNs are inherently \emph{analog} and are closely related to Shannon's general purpose analog computer (GPAC) model (CITE).
+Traditionally deterministic CRNs and GPACs receive their input via an \
+
+% 3. FRP and Deterministic CRNs
+%     * Briefly introduce the input/output deterministic CRN model
+%     * Draw connections between between the previous works on
+%       chemical circuits and finite automata and FRP
+%     * In particular, emphasize how these CRNs are literally signal
+%       functions in the FRP sense that transform one type of signal
+%       into another
+%     * Drawing connections with how real biological systems use
+%       molecular communication and react to input signals changing
+%       such as the cell cycle switch
+%     * Overview Ally's work on deterministic CRNs, the IOCRN type,
+%       the Arrow implementations, and examples
+%     * Show how the NAND gate and S-R latch can easily be implemented
+%       in this characterization. Use the Yampa Arrow syntax to
+%       demonstrate how the S-R latch can be implemented using
+%       two NAND gates and the Arrow combinators
+%     * Emphasize how the Bool type encapsulates the idea of a dual
+%       rail encoding whereas the Double type is a continuous real
+%       valued signal
+%     * Discuss how STL (a continuous-space variant of LTL) is a natural
+%       choice for a type system. Give examples of how the requirements
+%       of the NAND gate and finite automata can be specified in STL

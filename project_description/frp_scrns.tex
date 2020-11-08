@@ -1,0 +1,55 @@
+%!TEX root = project_description.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{FRP and Stochastic CRNs}
+\label{sec:frp_scrns}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%o
+
+To be written...
+
+% 4. FRP and Stochastic CRNs
+%     * Briefly introduce the stochastic CRN model and constrast its
+%       unique qualities with the deterministic I/O CRN model
+%     * Discuss the multiple approaches that could be explored to
+%       provide language support for SCRNs, in particular, the deterministic
+%       function computation approach and the more general probability
+%       distribution approach
+%
+
+\subsection{Leader-Directed Functional Programming}
+
+To be written...
+
+%     A. Leader-Directed Functional Programming
+%         * Draw connections to current literature on deterministic function
+%           computation, leader election, and Turing completeness results
+%           that often use leader molecules to direct the computation
+%         * Overview Bryce's work on stochastic CRNs, the SCRN type, the
+%           Arrow implementations, etc.
+%         * Show how the hailstone function can be easily implemented
+%           using FRP combinators
+%         * Explain how each stage of the computation may be compiled to
+%           have an arbitrarily low chance of failure
+%         * Contrast this approach with the IOCRN and how its inputs are
+%           consumed during the computation
+%         * Explain that leader-directed 
+%
+
+\subsection{FRP and Probabilistic Signals}
+
+To be written...
+
+%     B. FRP and Probabalistic Signals
+%         * Emphasize how both stochastic CRNs are inherently probabalistic
+%           and how input signals are in reality, mapping time to a
+%           distribution of possible CRN states
+%         * Mention how the previously mentioned approach employs the leader
+%           method to precisely control the ordering of events. In contrast,
+%           biological systems oftem harness stochasticity to be a benefit
+%         * We propose to investigate a more general approach to employ FRP
+%           in this stochastic setting by regarding the signals of SCRNs to
+%           be signals of "probability distributions"
+%         * Since CSL is known to be a bisimulation for SCRNs, we will also
+%           explore how a CSL type system may be employed to reason about
+%           the complex abstractions of manipulating probability
+%           distributions through FRP combinators
