@@ -5,7 +5,27 @@
 \label{sec:frp_scrns}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%o
 
-To be written...
+When modeling molecular interactions in small volumes, the deterministic chemical reaction network model is often insufficient.
+Consider a volume the size of a mammalian cell where the presence or absence of a single molecule may affect the entire behavior of the cell.
+Chemical systems in these environments are inherently probabilistic, and as a result modeling chemical reaction networks with \emph{stochastic mass action kinetics} is appropriate.
+In a stochastic CRN, molecular counts are modeled discretely, and therefore a state of the CRN consists of a vector of integers.
+Stochastic CRNs are equivalent to many well-known models such as vector addition systems, Petri nets, and population protocols CITE.
+\todo{CITE}
+
+Molecular programmers commonly use stochastic CRNs in one of two ways.
+The first approach is to use a \emph{leader molecule} to help direct the computation.
+Use of leaders are important in many distributed computing algorithms and have been thoroughly investigated in the population protocol model CITE \todo{CITE}.
+In the context of a stochastic CRN, a leader molecule is used to enable and disable target stages of the computation to guarantee modularity and prevent interference from different parts of the program.
+Commonly only one leader molecule exists in the solution at a time, and when one stage of the computation finishes, it decays into a new leader molecule that enables the next part of the algorithm.
+Note that such a technique is impossible in a deterministic CRN because a species with strictly positive concentration will remain positive forever.
+The second approach is to embrace the stochasticity of the model and harness it to perform computation.
+For example, in CITE \todo{CITE}, the authors exploit the stochastic nature of these CRNs to implement arbitrary probability distributions at the nanoscale.
+In CITE, the author uses randomness to efficiently and robustly solve a variety of search problems via a random walk augmented with various heuristics \todo{CITE and double check that this is true}.
+Programming stochastic CRNs in this way often involves 
+
+Since programming with stochastic CRNs is fundamentally different than with deterministic CRNs, the use of functional reactive programming will also be inherently different.
+We propose investigating two alternative functional reactive programming languages for stochastic CRNs that parallel the two development approaches mentioned above.
+The first will employ leader molecules to facilitate composing and 
 
 % 4. FRP and Stochastic CRNs
 %     * Briefly introduce the stochastic CRN model and constrast its
