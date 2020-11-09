@@ -76,3 +76,46 @@ where \lstinline!reactions! is a list of \lstinline!Reaction!s that store the re
 %     * Discuss how STL (a continuous-space variant of LTL) is a natural
 %       choice for a type system. Give examples of how the requirements
 %       of the NAND gate and finite automata can be specified in STL
+
+
+\subsection*{Titus Random Thoughts on NAND Requirements in STL}
+\todo{These are experimental ideas that can be discarded if not needed}
+In PI Klinge and PI Lathrop's paper on robust chemical circuits CITE, they formally define the requirements of a NAND gate.
+Their definition can easily be written in \emph{signal temporal logic} (\emph{STL}) which is almost identical to LTL except that it tailored to systems with continuous state spaces.
+The NAND gate has four input species \( X_1, \overline{X}_1, X_2, \overline{X}_2  \) and two output species \( Y, \overline{Y} \).
+Intuitively, these three pairs of species represent the Boolean inputs and Boolean output of the NAND gate using the common \emph{dual rail} encoding of Booleans.
+The requirement of the NAND gate can simply be written \( \Box(\phi_1 \land \phi_2) \) where \( \phi_1 \) and \( \phi_2 \) are two STL expressions that describe the two cases of the truth table of a NAND gate.
+These expressions can be written:
+\begin{align*}
+    \phi_1 &= \Box_{[a,b]} (X_1 = 1 \land X_2 = 1) \rightarrow \Box_{[a+\tau, b]} (Y = 0)\\
+    \phi_2 &= \Box_{[a,b]} (X_1 = 0 \lor X_2 = 0)  \rightarrow \Box_{[a+\tau, b]} (Y = 1)
+\end{align*}
+Intuitively, the combined STL statement \( \Box(\phi_1 \land \phi_2) \) says that whenever the input signal holds \( X_1 = 1 \) and \( X_2 = 1 \) during the interval \( [a,b] \), then the output signal must hold \( Y = 0 \) during the interval \( [a+\tau, b] \).
+The constant \( \tau \) is commonly called the \emph{propagation delay} and describes how responsive a NAND gate is to its inputs changing.
+
+In the previous example of the NAND gate requirement, we can consider the CRN implementing the NAND gate requirement as a \emph{signal function}.
+Whenever the input signal contains an input event such as \( \Box_{[a,b](X_1 = 1 \land X_2 = 1)} \), then the output signal produces an output event \( \Box_{[a+\tau, b]}(Y = 0) \).
+As a result, the signal function the CRN implements a ``lift'' of the pure function
+\[
+    f(x_1, x_2) =
+    \begin{cases}
+        0, &\text{ if }x_1 = x_2 = 1\\
+        1, &\text{ otherwise}
+    \end{cases}.
+\]
+Combining such CRNs with FRP combinators such as \lstinline!>>>!, \lstinline!&&&!, and \lstinline!***! combines these signal functions into new signal functions that can implement any finite combinational Boolean function.
+The authors painstakingly proved that the composition of these signal functions transforms their input signals into the appropriate output signals.
+However, this approach to molecular programming is exactly functional reactive programming.
+
+We propose to place a type system on top of our embedded Haskell language that statically verifies STL statements of this form.
+To our knowledge, such an approach has never been attempted, and could have broad impacts on both the correctness and safety of molecular programs and accelerate the development process.
+
+\subsection*{Titus Random Thoughts on NFA Requirements in STL}
+Similar to the previous section, PI Klinge and PI Lathrop were co-authors on a paper using deterministic CRNs to implement arbitrary nondeterministic finite automata (NFAs).
+These CRNs had formal requirements that are also conducive to functional reactive programming.
+In particular, the input signals provided to the an NFA-simulating CRN included a sequence of \emph{symbol events} which are intervals \( [a,b] \) that encode a symbol \( a\in\Sigma \) of the NFA's input alphabet.
+The NFA-simulating CRN would process these symbols in real time, while updating its internal state to reflect the current states the NFA would be in after processing those symbols.
+The output signal of this CRN also consisted of a sequence of intervals \( I_1, I_2, \ldots \) where each interval encoded a set of states \( A\subseteq Q \) of the NFA that are reachable from the starting states while processing each symbol of the input.
+
+In this case, the NFA-simulating CRN is also a signal function that receives an input signal that contains a sequence of symbol events and produces an output signal consisting of state change events.
+In particular, the CRN can be regarded as a \emph{casual function} that implements the transition function \( \delta(q,a) \) of the NFA.
