@@ -6,7 +6,10 @@
 ONEDRIVE_PATH="/Users/osera/OneDrive - Grinnell College/Documents/NSF Medium 2020 (Osera)"
 DOC_PREFIX=nsf-medium-fet-2020-osera
 DOCS=("budget" "data-plan" "facilities" "rui")
-COPY_OVER=("nsf20-medium-fet-budget-osera.xlsx" "nsf20-medium-fet-coa-osera.xlsx" "nsf20-medium-fet-current-and-pending.pdf")
+COPY_OVER=("nsf20-medium-fet-budget-osera.xlsx"
+           "nsf20-medium-fet-coa-osera.xlsx"
+           "nsf20-medium-fet-current-and-pending.pdf"
+           "nsf20-medium-fet-biosketch-osera.pdf")
 
 echo "Building and copying TeX docs..."
 for doc in ${DOCS[@]}; do
