@@ -2,64 +2,62 @@
 
 \input{../preface/includes.tex}
 
-\usepackage{minted}
-\newminted{haskell}{}
-\newminted{javascript}{}
-\newmintinline[hask]{haskell}{}
-\newmintinline[js]{javascript}{}
+% \usepackage{minted}
+% \newminted{haskell}{}
+% \newmintinline[hask]{haskell}{}
 
-%\usepackage{listings}
+\usepackage{listings}
 \usepackage{xcolor}
 
-%\definecolor{mygreen}{rgb}{0,0.6,0}
-%\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-%\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
 
-%\lstset{ 
-  %% backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
-  %basicstyle=\ttfamily,        % the size of the fonts that are used for the code
-  %flexiblecolumns=true,
-  %breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
-  %breaklines=true,                 % sets automatic line breaking
-  %commentstyle=\color{mygreen},    % comment style
-  %keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  %keywordstyle=\color{blue},       % keyword style
-  %language=Haskell,                 % the language of the code
-  %stringstyle=\color{mymauve},     % string literal style
-%}
+\lstset{ 
+  % backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\ttfamily,        % the size of the fonts that are used for the code
+  flexiblecolumns=true,
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  commentstyle=\color{mygreen},    % comment style
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Haskell,                 % the language of the code
+  stringstyle=\color{mymauve},     % string literal style
+}
 
 % From: https://tex.stackexchange.com/questions/89574/language-option-supported-in-listings
-%\lstdefinelanguage{JavaScript}{
-  %keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-  %keywordstyle=\color{blue}\bfseries,
-  %ndkeywords={class, export, boolean, throw, implements, import, this},
-  %ndkeywordstyle=\color{darkgray}\bfseries,
-  %identifierstyle=\color{black},
-  %sensitive=false,
-  %comment=[l]{//},
-  %morecomment=[s]{/*}{*/},
-  %commentstyle=\color{purple}\ttfamily,
-  %stringstyle=\color{red}\ttfamily,
-  %morestring=[b]',
-  %morestring=[b]"
-%}
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
 
 \newcommand{\bnfalt}{\;\mathrel{\mid}\;}
 \newcommand{\bnfdef}{%
   \mathrel{\!\colon\!\!\colon\!\mathord{=}}%
 }
 
-%\newenvironment{centeredlstlisting}
-  %{%
-    %\begin{center}
-    %\begin{tabular}{c}
-    %\begin{lstlisting}
-  %}
-  %{%
-    %\end{lstlisting}
-    %\end{tabular}
-    %\end{center}
-  %}
+\newenvironment{centeredlstlisting}
+  {%
+    \begin{center}
+    \begin{tabular}{c}
+    \begin{lstlisting}
+  }
+  {%
+    \end{lstlisting}
+    \end{tabular}
+    \end{center}
+  }
 
 \begin{document}
 
