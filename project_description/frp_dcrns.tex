@@ -20,37 +20,37 @@ Another example of using deterministic CRNs in this way is CITE \todo{CITE} whic
 
 Both of these examples, the NFA-simulating CRNs and the circuit-simulating CRNs, are literally \emph{signal functions} in functional reactive programming terms.
 We propose to develop a functional reactive language, embedded in Haskell, that captures this approach to molecular programming.
-A deterministic CRN would then be typed with \lstinline!DCRN a b! that is comparable to Yampa's signal function \lstinline!SF a b! so that it receives a time varying signal \lstinline!Time -> a! and produces a new signal \lstinline!Time -> b!.
+A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
 
-\begin{lstlisting}
-    nand :: DCRN (Bool, Bool) Bool
-\end{lstlisting}
+\begin{haskellcode}
+nand :: DCRN (Bool, Bool) Bool
+\end{haskellcode}
 
-This says that \lstinline{nand} is a deterministic CRN that receives an input signal that encodes two Boolean values at all times and produces a new signal that is the conjunction of these two signals at all times \( t \).
-If the \lstinline{DCRN} type is an instance of Yampa's \lstinline{Arrow} and \lstinline{ArrowLoop} typeclasses, then it is possible to construct an S-R latch by combining two \lstinline{nand} CRNs together using the following syntax:
+This says that \hask{nand} is a deterministic CRN that receives an input signal that encodes two Boolean values at all times and produces a new signal that is the conjunction of these two signals at all times \( t \).
+If the \hask{DCRN} type is an instance of Yampa's \hask{Arrow} and \hask{ArrowLoop} typeclasses, then it is possible to construct an S-R latch by combining two \hask{nand} CRNs together using the following syntax:
 
-\begin{lstlisting}
-    srlatch :: DCRN (Bool, Bool) Bool
-    srlatch = proc (sn, rn) -> do
-        rec q  <- ynand -< (sn, qn)
-            qn <- ynand -< (rn, q)
-        returnA -< q
-\end{lstlisting}
+\begin{haskellcode}
+srlatch :: DCRN (Bool, Bool) Bool
+srlatch = proc (sn, rn) -> do
+    rec q  <- ynand -< (sn, qn)
+        qn <- ynand -< (rn, q)
+    returnA -< q
+\end{haskellcode}
 
-The definition of \lstinline!DCRN! in our preliminary work is:
-\begin{lstlisting}
-    data DCRN a b = DCRN { reactions :: [Reaction]
-                         , inputs    :: Species a
-                         , outputs   :: Species b  }
-\end{lstlisting}
-where \lstinline!reactions! is a list of \lstinline!Reaction!s that store the reactants, products, and rate constant of each reaction, and where \lstinline!Species! is a parameterized type defined by
-\begin{lstlisting}
-    data Species a where
-        BoolSpecies   :: Name -> Name -> Species Bool
-        DoubleSpecies :: Name -> Species Double
-        PairSpecies   :: Species a -> Species b -> Species (a, b)
-\end{lstlisting}
+The definition of \hask{DCRN} in our preliminary work is:
+\begin{haskellcode}
+data DCRN a b = DCRN { reactions :: [Reaction]
+                     , inputs    :: Species a
+                     , outputs   :: Species b  }
+\end{haskellcode}
+where \hask{reactions} is a list of \hask{Reaction}s that store the reactants, products, and rate constant of each reaction, and where \hask{Species} is a parameterized type defined by
+\begin{haskellcode}
+data Species a where
+    BoolSpecies   :: Name -> Name -> Species Bool
+    DoubleSpecies :: Name -> Species Double
+    PairSpecies   :: Species a -> Species b -> Species (a, b)
+\end{haskellcode}
 
 \todo{I am just rambling at this point. How much detail do we want to go into in the implementation of all this?}
 
@@ -103,7 +103,7 @@ As a result, the signal function the CRN implements a ``lift'' of the pure funct
         1, &\text{ otherwise}
     \end{cases}.
 \]
-Combining such CRNs with FRP combinators such as \lstinline!>>>!, \lstinline!&&&!, and \lstinline!***! combines these signal functions into new signal functions that can implement any finite combinational Boolean function.
+Combining such CRNs with FRP combinators such as \hask{>>>}, \hask{&&&}, and \hask{***} combines these signal functions into new signal functions that can implement any finite combinational Boolean function.
 The authors painstakingly proved that the composition of these signal functions transforms their input signals into the appropriate output signals.
 However, this approach to molecular programming is exactly functional reactive programming.
 
