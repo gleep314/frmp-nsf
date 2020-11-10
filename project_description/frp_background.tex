@@ -8,13 +8,23 @@
 In this section, we review the essential characteristics of functional programming that we believe make it an excellent fit for modeling chemical reaction networks.
 We also introduce the fundamentals of functional reactive programming which form the basis of our proposed language design.
 
-\subsection{The Benefits of Functional Programming}
+\subsection{Characteristics of Functional Programming}
 
-\begin{itemize}
-  \item Traditionally, pure functional programming offers referential transparency, \ie, they behave like mathematical functions.
-  \item Huges~\cite{huges:1990} cites higher-order functions and laziness as ways of achiving modularity unique to functional programming.
-  \item While sometimes not ``natural'' to program in, Osera~\cite{osera:thesis:2015} notes that strong static typing allows for program automation that helps overcome these difficulties.
-\end{itemize}
+Functional programming encompasses a wide range of practices centered on organizing programs through the composition of functions.
+In this proposal, we focus exclusively on \emph{pure, strong-typed functional programming} as best exemplified by the Haskell programming language.
+By \emph{pure}, we mean that functions exhibit no (uncontrolled) side-effects such as variable mutation, exceptions, or input-output.
+Because of this, functions in such a language enjoy \emph{referential transparency}, \ie, they behave like mathematical functions, allowing us to compose them while preserving their respective properties.
+A \emph{Strong, static type system} acts as a lightweight verification tool, allowing a compiler to check properties of the input program.
+These properties are simple when the type system itself is simple, but can grow in increasingly complexity by scaling up the complexity of the type system.
+
+In addition to these properties, Huges~\cite{huges:1990} outlines a pair of additional \emph{positive properties} of languages like Haskell that allow for the creation of highly modular, composable code.
+\emph{Higher-order functions} and \emph{parametric polymorphism} allow us to write highly-generic, reusable libraries that can serve many purposes.
+We can push their features to their limit and author complete \emph{domain-specific languages} embedded within a host language that enjoy the high-level features of the host but allow for direct manipulate of objects in the target domain.
+\emph{Lazy evaluation}, where code is not executed until it is absolutely required by the computation, allows us to efficiently and elegantly process \emph{streams} of data in a uniform manner.
+
+Finally, we acknowledged that there is a significant trade-off between language safety guarantees and complexity when considering a pure, strongly-typed functional programming languages.
+However, in his work, PI Osera and his collaborators have found that the additional information provided by a static type system in this situation can be utilized by \emph{program synthesis techniques}~\cite{osera:thesis:2015} to provide users with rich editing support.
+These tools can help automate much of the tedium and difficult in navigating the rich types of these languages.
 
 \subsection{Functional Reactive Programming}
 
