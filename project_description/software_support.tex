@@ -11,27 +11,32 @@ The integrated development environment must include support for extending the en
 Examples of such integrated environments include Visual Studio Code and Eclipse.
 
 The proposed research includes creating the following software artifacts.
+\begin{enumerate}
+	\item A \texttt{DCRN} Haskell library that includes a domain specific language (DSL) that facilitates developing deterministic CRNs using FRP constructs, as discussed in Section~\ref{sec:frp_dcrns}.
+	
+	\item A \texttt{SCRN} Haskell DSL library for stochastic CRN development, as discussed in Section~\ref{sec:frp_scrns}.
+	
+	\item A library for translating \texttt{DCRN} and \texttt{SCRN} high-level representations into low-level internal CRN representations.
+
+	\item We include facilities for exporting our internal CRN representation to other commonly used CRN file formats such a the Systems Biology Markup Language (SBML).
+	This allows other used programs such as Visual GEC and Matlab Simbiology to load the exported CRNs.
+\end{enumerate}
+
+\todo{Come back to this and make sure it is broken up in the way we want}
 
 \begin{enumerate}
-	\item FRMP library that comprises the of the system in Haskell for FRP
-	
-	\item <name?>  library for stochastic stuff both leader and FRP version
-	
-	\item Library for translating Haskell CRN representation to actual chemical reaction network.
+	\item Develop a new language with an embedded type system using temporal logics such as LTL and STL.
+
+	\item will include  enable the simulation of compiled CRNs to be displayed in the IDE environment.
 	
 	\item Plugin support for highlighting CRN specific types with appropriate error indication for types.  Tool tip indicates and suggestions for corrections.  (Could lead to synthetic programming?)
 	
-	\item plugin that supports export to common formats such as SBML so that CRN tools can be used to analyze resutlant CRNs.  Also allows programs such as VIsual GEC and Matlab simbiology to load produced CRNs.
-	
-	\item plugin to support simulation inside the IDE to allow immediate visual confirmation of the code.
-	
 	\item plugin that allows STL and LTL specifications to coesist with the code.  (What should this do?)
-	
-	\item It is anticipated that other plugin tools will be recognized as the research progresses, and such tools will also be developed and released.
-	
 
+	\item Develop GUI controls to facilitate ease of interacting with the libraries.
+	
+	\item We anticipate other software tools will be needed as the research progresses and these tools will be developed and released.
 \end{enumerate}
-\todo{reword these items}
 
 Many of these individual projects are ideal for undergraduate participation to help create the overall system.
 
