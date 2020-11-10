@@ -1,23 +1,44 @@
 %!TEX root = project_description.tex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Tool Support for Functional Reactive Molecular Programming}
+\section{Tool Support and Software for Functional Reactive Molecular Programming in CRNs}
 \label{sec:software_support}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Several software artifacts will be produced to aid in the proposed research and make the research accessible to the scientific community.  Such tools will support a cohesive and reliable environment for research and development of the FRP language during the proposed research, and provide end-user tools to researchers and molecular programmers.  As discussed in Section~\ref{sec:broader_impacts}, these tools may be useful in a more general context such as analog computing using FRP.
+Several software artifacts will be produced to aid in the proposed research and make the research accessible to the scientific community.  Such tools will support a cohesive and reliable environment for research and development of the of the proposed research, and provide end-user tools to researchers and molecular programmers.  As discussed in Section~\ref{sec:broader_impacts}, these tools may be useful in a more general context such as analog computing using FRP.
+Most of these tools will reside within an integrated development environment and the proposed research will make heavy use of an existing development environment that may be freely distributed to the research community.
+The integrated development environment must include support for extending the environment to accommodate the proposed research.
+Examples of such integrated environments include Visual Studio Code and Eclipse.
 
-These software artifacts 
+The proposed research includes creating the following software artifacts.
+\begin{enumerate}
+	\item A \texttt{DCRN} Haskell library that includes a domain specific language (DSL) that facilitates developing deterministic CRNs using FRP constructs, as discussed in Section~\ref{sec:frp_dcrns}.
+	
+	\item A \texttt{SCRN} Haskell DSL library for stochastic CRN development, as discussed in Section~\ref{sec:frp_scrns}.
+	
+	\item A library for translating \texttt{DCRN} and \texttt{SCRN} high-level representations into low-level internal CRN representations.
 
-implemetned in visual studio code - others may work such as eclipse.
+	\item We include facilities for exporting our internal CRN representation to other commonly used CRN file formats such a the Systems Biology Markup Language (SBML).
+	This allows other used programs such as Visual GEC and Matlab Simbiology to load the exported CRNs.
+\end{enumerate}
+
+\todo{Come back to this and make sure it is broken up in the way we want}
 
 \begin{enumerate}
-	\item IDE plugins support for CRN FRP.  Basic support for the framework  This includes ...  
+	\item Develop a new language with an embedded type system using temporal logics such as LTL and STL.
+
+	\item will include  enable the simulation of compiled CRNs to be displayed in the IDE environment.
 	
-	\item Compiler or translator to convert the FRP code to a CRN.  Export CRN formats.
+	\item Plugin support for highlighting CRN specific types with appropriate error indication for types.  Tool tip indicates and suggestions for corrections.  (Could lead to synthetic programming?)
 	
-	\item IDE simulator display
+	\item plugin that allows STL and LTL specifications to coesist with the code.  (What should this do?)
+
+	\item Develop GUI controls to facilitate ease of interacting with the libraries.
+	
+	\item We anticipate other software tools will be needed as the research progresses and these tools will be developed and released.
 \end{enumerate}
+
+Many of these individual projects are ideal for undergraduate participation to help create the overall system.
 
 
 % 5. Software Support for Functional Reactive Molecular Programming
