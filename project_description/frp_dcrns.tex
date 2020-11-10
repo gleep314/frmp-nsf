@@ -5,20 +5,31 @@
 \label{sec:frp_dcrns}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Arguably the most prominent semantics for chemical reaction networks is \emph{deterministic mass action kinetics}, where the molecular counts of each species is modeled as a continuously-varying concentration.
-Moreover, these species concentrations evolve continuously according to a system of ordinary differential equations.
-Deterministic CRNs are inherently \emph{analog} and are closely related to Shannon's general purpose analog computer (GPAC) model (CITE).
-\todo{CITE}
-Commonly, deterministic CRNs and GPACs receive their input via an \emph{initial state} (at time zero), process it, and present their output at some future time \( t \)---or even converge to the appropriate output as \( t \) approaches infinity.
-However, such machines can also be used as \emph{signal processors} that receive a continuously varying input signal and transform it in real time into a continuously varying output signal.
-This characterization of computation with deterministic CRNs is used in CITE \todo{CITE} to show that any nondeterministic finite automaton can be simulated in real time by a deterministic CRN.
-These CRNs receive their input strings as a sequence of \emph{pulses} and change its internal state in response to each input event.
-Each NFA simulating deterministic CRN is literally a signal combinator that, when given a sequence of pulses, produces its own sequence of pulses that encodes the current state transitions of the NFA while processing the signal.
-Many biological systems found in nature behave in a similar fashion, where when presented with a pulse of a specific molecule type, will react in some way.
-\todo{Fix this paragraph}
-Another example of using deterministic CRNs in this way is CITE \todo{CITE} which implements arbitrary combinational circuits that react in real time to their input signals and produce output signals in response according to traditional logic gates.
+One of the most prominent semantics for chemical reaction networks is \emph{deterministic mass action kinetics}, where the number of molecules of each species is modeled as a continuously-varying concentration~\cite{oErdTot89,oEpsPoj98,oGuna03,oLent15}.
+These concentrations evolve continuously according to a system of ordinary differential equations (ODEs), derived from the \emph{law of mass action} and the reactions within the network.
+Deterministic CRNs are inherently \emph{analog} and are closely related to Shannon's general purpose analog computer (GPAC)~\cite{jShan41,jGraCos03,jGrac04,cBoGrPo16,cFLBP17,rtcrn2}.
+For example, the CRN \( X_1 + X_2 \goesto{} Y \) from Figure~\ref{fig:min_max_example} (a) computes the \emph{minimum} of the initial concentrations of \( X_1 \) and \( X_2 \).
+The law of mass action requires that the rate of this reaction at time \( t \) is proportional to the product of the concentration of its reactants at time \( t \), denoted by \( x_1(t) \) and \( x_2(t) \).
+Since this reaction has a positive net effect on \( Y \) and a negative net effect on \( X_1 \) and \( X_2 \), the ODEs for the three species are:
+\[
+    \frac{dx_1}{dt} = -x_1(t)x_2(t), \qquad
+    \frac{dx_2}{dt} = -x_1(t)x_2(t), \qquad
+    \frac{dy}{dt}   =  x_1(t)x_2(t).
+\]
 
-Both of these examples, the NFA-simulating CRNs and the circuit-simulating CRNs, are literally \emph{signal functions} in functional reactive programming terms.
+Commonly, deterministic CRNs and GPACs receive their input via an \emph{initial state} (at time zero), process it, and present their output at some future time \( t \).
+For the CRN computing the minimum function above, the concentration of its output \( Y \) converges to the appropriate value as \( t \) approaches infinity.
+However, deterministic CRNs and GPACs can also be regarded as \emph{signal processors} that receive a continuously varying input signal, while producing a continuous output signal in real time.
+This characterization of computation with deterministic CRNs is used in~\cite{jKlLaLu20} to show that any nondeterministic finite automaton can be simulated in real time by a deterministic CRN.
+These CRNs receive their input strings as a sequence of \emph{pulses} and change their internal state in response to each input event.
+% In the terminology of FRP, each NFA-simulating deterministic CRN is literally a \emph{signal function} that, when given a valid input signal, produces an output signal that encodes each of the state transitions of the NFA while it processes its input.
+Another example of using deterministic CRNs in this way is~\cite{rdc} which implements arbitrary combinational circuits that react in real time to their input signals and produce output signals in response according to traditional logic gates.
+% Many biological systems found in nature behave in a similar fashion, where when presented with a pulse of a specific molecule type, will react in some way.
+% \todo{Consider removing the previous sentence or finding relevant citations to back it up}
+Both of these examples regard deterministic CRNs as \emph{signal functions} in functional reactive programming terms.
+
+\todo{Titus needs to continue editing here...}
+
 We propose to develop a functional reactive language, embedded in Haskell, that captures this approach to molecular programming.
 A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
