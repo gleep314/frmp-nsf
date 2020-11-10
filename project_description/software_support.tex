@@ -1,23 +1,39 @@
 %!TEX root = project_description.tex
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Tool Support for Functional Reactive Molecular Programming}
+\section{Tool Support for Functional Reactive Molecular Programming in CRNs}
 \label{sec:software_support}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Several software artifacts will be produced to aid in the proposed research and make the research accessible to the scientific community.  Such tools will support a cohesive and reliable environment for research and development of the FRP language during the proposed research, and provide end-user tools to researchers and molecular programmers.  As discussed in Section~\ref{sec:broader_impacts}, these tools may be useful in a more general context such as analog computing using FRP.
+Several software artifacts will be produced to aid in the proposed research and make the research accessible to the scientific community.  Such tools will support a cohesive and reliable environment for research and development of the of the proposed research, and provide end-user tools to researchers and molecular programmers.  As discussed in Section~\ref{sec:broader_impacts}, these tools may be useful in a more general context such as analog computing using FRP.
+Most of these tools will reside within an integrated development environment and the proposed research will make heavy use of an existing development environment that may be freely distributed to the research community.
+The integrated development environment must include support for extending the environment to accommodate the proposed research.
+Examples of such integrated environments include Visual Studio Code and Eclipse.
 
-These software artifacts 
-
-implemetned in visual studio code - others may work such as eclipse.
+The proposed research includes creating the following software artifacts.
 
 \begin{enumerate}
-	\item IDE plugins support for CRN FRP.  Basic support for the framework  This includes ...  
+	\item <name?> library that comprises the guts of the system in Haskell for FRP
 	
-	\item Compiler or translator to convert the FRP code to a CRN.  Export CRN formats.
+	\item <name?>  library for stochastic stuff both leader and FRP version
 	
-	\item IDE simulator display
+	\item Library for translating Haskell CRN representation to actual chemical reaction network.
+	
+	\item Plugin support for highlighting CRN specific types with appropriate error indication for types.  Tool tip indicates and suggestions for corrections.  (Could lead to synthetic programming?)
+	
+	\item plugin that supports export to common formats such as SBML so that CRN tools can be used to analyze resutlant CRNs.  Also allows programs such as VIsual GEC and Matlab simbiology to load produced CRNs.
+	
+	\item plugin to support simulation inside the IDE to allow immediate visual confirmation of the code.
+	
+	\item plugin that allows STL and LTL specifications to coesist with the code.  (What should this do?)
+	
+	\item It is anticipated that other plugin tools will be recognized as the research progresses, and such tools will also be developed and released.
+	
+
 \end{enumerate}
+\todo{reword this items}
+
+Many of these individual projects are ideal for undergraduate participation to help create the overall system.
 
 
 % 5. Software Support for Functional Reactive Molecular Programming
