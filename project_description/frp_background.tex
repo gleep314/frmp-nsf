@@ -68,8 +68,8 @@ In short, rather than updating the text---which is specifying ``how'' a computat
 Thus, when we define an object, we define it as a time-varying function reacting to streams of events.
 This allows us to retain a declarative, equational style in our code.
 
-To demonstrate these concepts, let's consider a FRP-based implementation of the mouse tracker code above.
-In a FRP system, the position of the mouse is a basic signal that we can then transform using various combinators into something more useful for our purposes, \eg, updating the label of our button.
+To demonstrate these concepts, let's consider an FRP-based implementation of the mouse tracker code above.
+In an FRP system, the position of the mouse is a basic signal that we can then transform using various combinators into something more useful for our purposes, \eg, updating the label of our button.
 The following example utilizes the \texttt{reactive-banana} library source code, a Haskell library for FRP~\cite{reactive-banana}, that contains bindings to \texttt{Wx}.
 The intent of this example is to not present how to program in \texttt{reactive-banana}, so we elide most of the details of how the various combinators operator.
 Instead, we wish to empahsize the declarative nature of the code and the way that the signals are defined in terms of each other.
@@ -89,5 +89,5 @@ From that, we construct a signal, \hask{behavior}, from this stream that is defi
 Finally, we can \emph{define} the text of our label to be a consumer of this behavior; that is, the text of the label should be whatever \hask{String} value \hask{behavior} takes on.
 
 In summary, note the declarative power of the functional reactive style.
-Through the various combinators offered by a FRP library, we can compose together signals to directly define how a collection of signals operate without managing their communication ourselves.
+Through the various combinators offered by an FRP library, we can compose together signals to directly define how a collection of signals operate without managing their communication ourselves.
 Furthermore, our code has no overt mutation and so it enjoys the benefits of modularity offered by functional programming.
