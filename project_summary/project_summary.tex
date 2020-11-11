@@ -6,6 +6,7 @@
 
     \setcounter{page}{1}
     \begin{center}
+        \vspace*{-3em}
         {\Large {\bf Project Summary}}
     \end{center}
     \vspace*{1em}
@@ -19,29 +20,33 @@
     Current support for CRN development either (a) provides little support for programming rich, complex, molecular systems or (b) chooses abstractions that hide the essence of CRNs, trading ease of use by limiting their behavior.
 
     This project will lay a foundation for the next generation of molecular programming by investigating a new approach to developing CRNs with abstractions that allow us to reason about their behavior in a direct, structured manner.
-    To this end, we propose the investigation of foundations-based language support for molecular programming based on \emph{functional reactive programming} (\emph{FRP}).
-    % FRP allows us to specify networks of intercommunicating objects, here, molecules, in a manner that allows us to retain the benefits of modular reasoning. 
-    \emph{FRP} is a well-studied programming paradigm where we define objects as pure functions of time, retaining the compositional benefits of the functional paradigm. 
-    Reimagining molecular systems as functional reactive programs has the potential to overcome the unique challenges of molecular programming and help researchers focus on harnessing the natural strengths of molecular programming rather than focus on avoiding its weaknesses.
-    This project will investigate (a) a functional reactive characterization of \emph{CRNs} with chemical signal function primitives and high-order combinators that compile to traditional \emph{CRNs}, (b) a type system for this FRP language for CRNs inspired by linear temporal logic that enforces correctness guarantees of the network, and (c) additional tool-based support for programming \emph{CRNs} built on top of the functional reactive foundations we will establish.
+    To this end, we propose the investigation of foundations-based language support for molecular programming based on \emph{functional reactive programming} (\emph{FRP}), a programming paradigm where we define objects as pure functions of time, retaining the compositional benefits of the functional paradigm. 
+    This project will investigate (a) a functional reactive characterization of CRNs with chemical signal function primitives and high-order combinators that compile to traditional CRNs, (b) a type system for this FRP language for CRNs inspired by linear temporal logic that enforces correctness guarantees of the network, and (c) additional tool-based support for programming CRNs built on top of the functional reactive foundations we will establish.
 
     \textbf{Intellectual Merit.}
     % This project applies high-level techniques from another research discipline into molecular programming.
-    Since molecular programming is significantly different from traditional programming approaches, this project will identify novel language constructs and methodologies that appropriately complement the unique advantages of molecular programming while abstracting away their error-prone low-level details.
+    Reimagining molecular systems as functional reactive programs has the potential to overcome the unique challenges of molecular programming and help researchers focus on harnessing the natural strengths of molecular programming rather than focus on avoiding its weaknesses.
     The new techniques and methodologies produced by this project will enhance the molecular program development process of other researchers, educators, and students and help them write programs that are correct and easy to maintain.
-    Moreover, the proposed work will advance the understanding of these programming language approaches by investigating alternative applications and uses of them in the field of molecular programming.
+    Since the approaches and techniques in the proposed research are applicable to other fields, this project may reveal insights into related fields such as analog computing and distributed algorithms.
     % Using typed chemical reaction networks and functional reactive programming techniques, the proposed work will extend and create new techniques beyond the current state of the art in the molecular programming paradigm.
 
     \textbf{Broader Impacts.}
-    This project includes a substantial undergraduate research component at three institutions, two of which are primarily undergraduate institutions.
-    The PIs, graduate student, and undergraduate students will collaborate to develop the languages and any software necessary to perform the research.
+    This project will catalyze the development of nanotechnologies with new, more natural techniques for molecular programming.
+    Moreover, since many applications of molecular programming are safety-critical, the proposed research promises to help ensure these technologies are correct, reliable, and safe by producing programming languages with type systems that are statically verified, ensuring that temporal properties are satisfied.
+    % Since the approaches and techniques in the proposed research are broadly applicable to other fields, this investigation will also positively impact research into the programmability of analog computers and distributed models of computation such as population protocols.
+    This project also includes a substantial undergraduate research component at three institutions, two of which are primarily undergraduate institutions.
+    The PIs, graduate students, and undergraduate students will collaborate to develop the languages and any software necessary to perform the research.
     This project will provide scientific research training and mentoring to all these students.
     All techniques and software produced during the project will be published or made available online for public use.
     The investigators and students will give tutorials and workshops at nearby colleges and reach out to high school students from underrepresented groups.
-    The PI's have experience reaching out to students and have recently co-taught molecular programming workshops and tutorials.
+    The PIs have experience reaching out to students and have recently co-taught molecular programming workshops and tutorials.
     This project will also produce undergraduate curriculum incorporating the techniques and tools developed.
 
-    This project will also accelerate the development of nanotechnologies by producing next-generation language techniques for molecular programming.
-    Such advancements are likely to lead to smart therapeutics and other medical technologies that will broadly impact society as a whole.
+    \vspace*{1ex}
+    \noindent
+    \textbf{Keywords:}
+    Molecular programming;
+    Chemical reaction networks;
+    Functional reactive programming
 
 \end{document}
