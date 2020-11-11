@@ -95,7 +95,6 @@ bvelocity :: Behavior Vector
     speedup v = v `vecScale` (vecLengthDouble v / 20)
 \end{haskellcode}
 This code calculates the velocity of the sprite as the difference of the sprite's position and the mouse's position with a constant \hask{speedup} factor.
-\end{haskellcode}
 
 Finally, with \hask{bvelocity} in hand, we can define the sprite's position \hask{bposition} in terms of the velocity signal we just defined:
 \begin{haskellcode}
