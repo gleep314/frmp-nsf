@@ -42,6 +42,12 @@ We present our initial findings that help validate FRP as a promising approach t
 % 2. Examples of constructs in Reactamole.
 % 3. Discussion of benefits gained so far.
 
+The following key insight motives our design of \reactamole{}:
+\begin{displayquote}
+A chemical reaction network is a signal function in a functional reactive program that outputs molecule concentrations.
+\end{displayquote}
+In \reactamole, we realize this with a type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
+
 A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
 
