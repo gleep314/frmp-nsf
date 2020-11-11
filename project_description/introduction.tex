@@ -17,8 +17,7 @@ Erik Winfree's tile self-assembly model~\cite{oWinf98,jWeDaYi12,qian17} sparked 
 One of the most prominent models of molecular programming is the chemical reaction network, which is a mathematical abstraction of chemical kinetics used for over a half century~\cite{jAris65}.
 Chemical reaction networks are a natural bridge between the theory and practical applications of molecular programming.
 In theory, they are algorithmically universal~\cite{jSCWB08,cFLBP17} and can be automatically compiled into concrete DNA molecules that simulate their behavior with arbitrary precision~\cite{cSoSeWi09,jLYCP12,jCard13,jCDSPCS13,jSPSWS17,cBSJDTW17}.
-As a result, chemical reaction networks are regarded as a prescriptive programming language for deploying algorithms at the nanoscale~\cite{jSCWB08,cSWBG19,jHKLLL18,rdc}.
-\todo{Add a sentence here that makes the broader impact of CRN research clear}
+As a result, chemical reaction networks are regarded as a prescriptive programming language for deploying algorithms at the nanoscale~\cite{jSCWB08,cSWBG19,jHKLLL18,rdc} and have the potential to accelerate the development the aforementioned biotechnologies.
 
 Roughly, a chemical reaction network (CRN) is a collection of \emph{reactions} over a finite set of abstract molecule types called \emph{species}.
 Depending on the target environment, a CRN is either modeled stochastically or deterministically.
@@ -142,26 +141,34 @@ The techniques used in this paper serialize computations in order to achieve thi
 
 In short, the prior work either (a) provides little support for programming rich, complex molecular systems, or (b) chooses abstractions that hide the essence of CRNs, trading ease of use by limiting their behavior.
 We instead recognize the inherent difficulties that CRN's unique computational behavior presents and choose instead to adopt abstractions that allow us to reason about this behavior in a direct, structured manner.
-To this end, we propose the construction of a foundations-based programming language for molecular programming based on \emph{functional reactive programming} (FRP), noting that a chemical reaction network is inherently \emph{reactive} in nature.
-Functional reactive programming is an established programming paradigm within the programming languages community that directly applies to the task of writing molecular programs.
+To this end, we propose the construction of a foundations-based programming language for molecular programming based on \emph{functional reactive programming}~(\emph{FRP}), noting that a chemical reaction network is inherently \emph{reactive} in nature.
+Functional reactive programming is an established programming paradigm within the programming languages community that directly applies to the task of writing molecular programs~\cite{elliott1997, czaplicki2013, finkbeiner2019, jeffrey2012}.
 Furthermore, the analysis of functional reactive programming languages is also well-studied, giving us immediate in-roads for analyzing CRNs written with this language.
-\todo{Update summary of our proposed work to match new thrust of research}
 For example, Linear Temporal Logic (LTL)~\cite{pnueli1997,manna2012temporal,oBaiKat08} is frequently used to verify the correctness of CRNs~\cite{jKwiTha14,cEHKLLL14,jEKLLLM17}.
 By the Curry-Howard Isomorphism, we can view LTL as a type system for our FRP-based language for CRNs.
 In this system, whenever a CRN successfully typechecks, we know that it validates its corresponding LTL specification (the LTL specification \emph{is} its type).
 Other adaptations from the programming languages are also possible, \eg, program synthesis with LTL specifications~\cite{finkbeiner2019}, further demonstrating the power of this foundations-based approach.
 
-\todo{Move Intellectual Merit section here}
+\textbf{Intellectual Merit.}
+We propose the design and study of: (1) The syntax and semantics of functional reactive programming languages for both deterministic and stochastic chemical reaction networks, (2) an LTL-inspired type system for these FRP languages, and (3) additional tool-based support for programming CRNs in this FRP style, including development environments and synthesis techniques.
+Reimagining molecular systems as functional reactive programs has the potential to help overcome the unique challenges and complexities of molecular programming.
+In particular, this FRP offers to help researchers focus on harnessing the natural strengths of molecular programming rather than focus on avoiding its weaknesses.
+Not only will this proposed work help to advance knowledge into the field of molecular programming, it may reveal insights into related fields such as analog computing and distributed algorithms.
 
-In summary, we propose the design and study of:
-\begin{enumerate}[itemsep=0pt]
-  \item The syntax and semantics of a \emph{functional reactive} programming language for chemical reaction networks.
-  \item A LTL-based type system for that functional reactive programming language.
-  \item Additional tool-based support for programming CRNs in this FRP style, including development environments and synthesis techniques.
-\end{enumerate}
+% Intellectual Merit: The Intellectual Merit criterion encompasses the potential to advance knowledge; and
+%   1. What is the potential for the proposed activity to: Advance knowledge and 
+%      understanding within its own field or across different fields?
+%   2. To what extent do the proposed activities suggest and explore
+%      creative, original, or potentially transformative concepts?
+%   3. Is the plan for carrying out the proposed activities well-reasoned,
+%      well-organized, and based on a sound rationale? Does the plan incorporate
+%      a mechanism to assess success?
+%   4. How well qualified is the individual, team, or organization to conduct
+%      the proposed activities?
+%   5. Are there adequate resources available to the PI (either at the home
+%      organization or through collaborations) to carry out the proposed activities?
 
-\todo{Add a paragraph outlining the rest of the proposal here}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
 % Proposed outline of the rest of the paper
 %
