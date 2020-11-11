@@ -30,9 +30,18 @@ Both of these examples regard deterministic CRNs as \emph{signal functions} in f
 
 \todo{Titus needs to continue editing here...}
 
-\subsection{Introducing \reactamole{}}
+\subsection{\reactamole{}: A FRP Language for DCRNs}
 
-We propose to develop a functional reactive language, embedded in Haskell, that captures this approach to molecular programming.
+We have begun to explore the design of a functional reactive programming language, \reactamole{}, that captures this approach to molecular programming for deterministic CRNs.
+\reactamole is currently an embdded domain specific language in Haskell although we envision a full language design including a type system based on \emph{temporal linear logic} which is commonly used to verify properties of DCRNs.
+We present our initial findings that help validate FRP as a promising approach to molecular programming and our plan for evolving these findings into a complete language.
+
+\subsubsection{Introducing \reactamole{}}
+
+% 1. Choice of representations in Reactamole.
+% 2. Examples of constructs in Reactamole.
+% 3. Discussion of benefits gained so far.
+
 A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
 
@@ -64,6 +73,13 @@ data Species a where
     DoubleSpecies :: Name -> Species Double
     PairSpecies   :: Species a -> Species b -> Species (a, b)
 \end{haskellcode}
+
+\subsection{From Prototype to Compelete Language}
+
+\begin{itemize}[itemsep=0pt]
+  \item Shape of target language and missing features.
+  \item Discussion of LTL-based type system.
+\end{itemize}
 
 \todo{I am just rambling at this point. How much detail do we want to go into in the implementation of all this?}
 
