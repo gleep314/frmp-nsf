@@ -129,15 +129,14 @@ Even in systems with only 20 reactions and four species, most species have a cha
 For this reason, molecular programs defined using the CRN syntax are challenging to develop and debug.
 
 To solve these issues, researchers have investigated linguistic support for molecular programming.
-For example, Visual GEC~\cite{jPedPhi09}, Visual DSD~\cite{jLYPEP11}, and CRN++~\cite{Vasic2020} all define a language for specifying molecular programs.
-\todo{Add Cardelli's new CRN programming language here}
+For example, Visual GEC~\cite{jPedPhi09}, Visual DSD~\cite{jLYPEP11}, CRN++~\cite{Vasic2020}, and Kaemika~\cite{cardelliKaemika} all define languages for specifying molecular programs.
 Visual GEC is concerned with synthetic biology, and its language is based on promoters, ribosome binding sites, protein coding regions and terminators.
 Visual DSD is explicitly designed for specifying DNA strand displacement networks.
-While both of the languages defined in these tools work well for their domains, they provide low-level programming constructs the make the development difficult.
+Kaemika is...\todo{PM, can you shut down Kaemika without offending Luca?}
+While the languages defined in these tools work well for their domains, they provide low-level programming constructs the make the development difficult.
 Even with the help of tools, it is easy to make subtle mistakes in programs that may be intermittent and difficult to find and debug.
 In contrast, CRN++ is a high-level language that gives molecular programmers the ability to specify programs in a more familiar imperative style.
 The techniques used in this paper serialize computations in order to achieve this effect, which is a severe restriction on what is, otherwise, an inherently parallel system.
-\todo{Add discussion of Cardelli's paper here}
 
 In short, the prior work either (a) provides little support for programming rich, complex molecular systems, or (b) chooses abstractions that hide the essence of CRNs, trading ease of use by limiting their behavior.
 We instead recognize the inherent difficulties that CRN's unique computational behavior presents and choose instead to adopt abstractions that allow us to reason about this behavior in a direct, structured manner.
