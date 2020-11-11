@@ -19,8 +19,9 @@
     Current support for CRN development either (a) provides little support for programming rich, complex, molecular systems or (b) chooses abstractions that hide the essence of CRNs, trading ease of use by limiting their behavior.
 
     This project will lay a foundation for the next generation of molecular programming by investigating a new approach to developing CRNs with abstractions that allow us to reason about their behavior in a direct, structured manner.
-    To this end, we propose the construction of a foundations-based programming language for molecular programming based on \emph{functional reactive programming} (\emph{FRP}), noting that a chemical reaction network is inherently \emph{reactive} in nature.
-    Furthermore \emph{FRP} is a well-studied programming paradigm with associated theory and techniques that can easily be improved into the domain of \emph{CRNs}
+    To this end, we propose the construction of a foundations-based programming language for molecular programming based on \emph{functional reactive programming} (\emph{FRP}).
+    \emph{FRP} is a well-studied programming paradigm where we define objects as pure functions of time, retaining the compositional benefits of the functional paradigm. 
+    Reimagining molecular systems as functional reactive programs has the potential to overcome the unique challenges of molecular programming and help researchers focus on harnessing the natural strengths of molecular programming rather than focus on avoiding its weaknesses.
     This project will investigate (a) a functional reactive characterization of \emph{CRNs} with chemical signal function primitives and high-order combinators that compile to traditional \emph{CRNs}, (b) a type system for this FRP language for CRNs inspired by linear temporal logic that enforces correctness guarantees of the network, and (c) additional tool-based support for programming \emph{CRNs} built on top of the functional reactive foundations we will establish.
 
     \textbf{Intellectual Merit.}
