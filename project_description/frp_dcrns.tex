@@ -30,6 +30,8 @@ Both of these examples regard deterministic CRNs as \emph{signal functions} in f
 
 \todo{Titus needs to continue editing here...}
 
+\subsection{Introducing \reactamole{}}
+
 We propose to develop a functional reactive language, embedded in Haskell, that captures this approach to molecular programming.
 A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
