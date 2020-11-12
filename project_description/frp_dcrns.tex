@@ -256,18 +256,22 @@ nand :: forall (a b t :: Interval) -> (x :: Boolean) -> (y :: Boolean)
           -> (  (G a b (x = True /\ y = True) -> G (a + t) False)
              /\ (G a b (x = False \/ y = False)) -> G (a + t) True)
            \end{haskellcode}
-where \hask{G} is the globally (\( \square \)) modality.
+where \hask{G} is the globally (\( \square \)) modality realized in our envisioned type system.
 As in Jeffrey's presentation, this particular example is a \emph{dependently-typed} example: the true arguments to the function \hask{x} and \hask{y} are used in the type of \hask{nand}, namely in the \emph{equality proofs} passed to \hask{nand} that assert the values of \hask{x} and \hask{y}.
-We intend on adapting Jeffrey's work in typing the various FRP combinators found in \reactamole.
-For example, the type of the inator \hask{(>>>)} in our LTL type system might be:
+
+We intend on adapting this LTL-types-FRP perspective to give types the various FRP combinators found in \reactamole as Jeffrey does in his work.
+For example, the type of the combinator \hask{(***)} in our LTL type system might be:
 \begin{haskellcode}
-  (***) :: forall a b c, k
+(***) :: forall a b c, (A |> B) -> (C |> D) -> (A, C) |> (B D)
 \end{haskellcode}
+where \hask{T |> U} is Jeffrey's \emph{casual function type} whose output type \hask{U} depend on the history of inputs of type \hask{T}.
+\hask{|>} accurately describes the relationship between the input species and output species of a CRN.
 
-The difficulty of rich typing is evident in the type of \hask{nand}: extremely rich types that describe totally correctness properties are
-
-
-Such a type system
+However, the difficulty of rich typing is evident in the type of \hask{nand}: rich types that describe rich properties are difficult to work with!
+While we intend on exploring the viability of this \emph{complete verification} style of LTL typing, we are also interested in looking at simplifications of this LTL-inspired type system that can \emph{partially verify} important program properties.
+For example, in our NAND example, we briefly introduced the notion of propogation delay of input/output signals.
+As a first step, we intend on building a limited LTL-inspired type system that verifies that CRN's are correct \emph{up to their computed propogation delays}.
+From there, we will grow our type system to handle more interesting properties, such as those that we discover during our initial experimentation with the language.
 
 % \paragraph{Example: Verifying NFAs}
 % Similar to the previous section, PI Klinge and PI Lathrop were co-authors on a paper using deterministic CRNs to implement arbitrary nondeterministic finite automata (NFAs).
