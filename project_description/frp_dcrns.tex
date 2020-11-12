@@ -56,10 +56,7 @@ To do this, \reactamole{} works exclusively with the \emph{input/output chemical
 An I/O CRN is a deterministic CRN where reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
 This means that the inputs to a CRN effectively are read-only values which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner.
 
-As an example, the NAND gate CRN described previously would have type:
-\begin{haskellcode}
-nand :: DCRN (Bool, Bool) Bool
-\end{haskellcode}
+The NAND gate CRN described previously would have type \hask{nand :: DCRN (Bool, Bool) Bool}.
 This type describes, equivalently:
 \begin{itemize}[itemsep=0pt]
   \item A signal function in functional reaction programming that takes pairs of Booleans as input and a Boolean as output.
@@ -69,6 +66,8 @@ This type describes, equivalently:
 
 \hask{nand} is universal for Boolean logic, so we can use this primitive to write other functions between Booleans.
 For example, we can define a deterministic CRN that acts as an \emph{S-R latch} in \reactamole{} as follows:
+\begin{center}
+\begin{minipage}{0.4\textwidth}
 \begin{haskellcode}
 srlatch :: DCRN (Bool, Bool) Bool
 srlatch = proc (sn, rn) -> do
@@ -76,6 +75,8 @@ srlatch = proc (sn, rn) -> do
         qn <- nand -< (rn, q)
     returnA -< q
 \end{haskellcode}
+\end{minipage}
+\end{center}
 This code takes advantage of the \emph{arrows} combinators of Hughes~\cite{hughes:2000:arrows} that \reactamole{} implements and Haskell provides special syntax for via the \hask{Arrows} extension.
 \hask{srlatch} is defined to be the composition of two \hask{nand}s set in a \emph{feedback loop}.
 The arrow binding \hask{q <- nand -< (sn, qn)} sends the input \hask{(sn, qn)} to \hask{nand} and names the output \hask{q} for further computation.
@@ -84,10 +85,14 @@ Finally, \hask{returnA -< q} returns \hask{q} from the function.
 
 In our initial exploration, we have implemented all of the arrow combinators of Hughes as transformations over I/O CRNs.
 For example, the \emph{split arrow} combinator has type:
+\begin{center}
+\begin{minipage}{0.7\textwidth}
 \begin{haskellcode}
 (***) :: DCRN a b -> DCRN a' b' -> DCRN (a, a') (a', b')
 f *** g = return $ DCRN (reactions f ++ reactions g)
 \end{haskellcode}
+\end{minipage}
+\end{center}
 That is, the combinator combines two DCRNs by pairing their inputs and outputs together.
 Because \reactamole{} maintains ``freshness'' of species names and we work with I/O CRNs whose reactants are catalytic, we obtain the behavior of split arrow by creating a new CRN generated from the \emph{union} of the two input CRNs.
 We have also implemented the lifting function of arrows \hask{arr} but specialized to Booleans.
@@ -192,10 +197,8 @@ However, we can encode a \hask{Real} directly using a single species concentrati
 For each such type we encode as a primitive, we will also need to provide a set of primitive operations over that type.
 However, because of the differences in physical substrate, this set of operations will necessarily be different than with traditional digital computation.
 For example, integration with \hask{Real} values represented as single species concentrations is trivial to implement.
-The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \):
-\[
-  X \goesto{} X + Y
-\]
+The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \): \( X \goesto{} X + Y \).
+
 In contrast, addition over \hask{Real}s is impossible to implement directly for unknown inputs.
 In order to accomplish this, the I/O CRN would not only need the real-valued concentrations of its input signal, but also their \emph{derivatives}.
 Thus, designing an appropriate set of primitives and associated operations for \reactamole{} will require careful consideration of what is necessary to enable a wide variety of programs while also adhering to the limits of our molecular context.
@@ -251,19 +254,27 @@ The starting point for our design comes from the observation made by Jeffrey~\ci
 The Curry-Howard Isomorphism posits that a logic has a dual interpretation as a type system of some programming language.
 Likewise, proofs in that logic can also be thought of as programs in that language.
 For example, we might envision giving \hask{nand} the rich type:
+\begin{center}
+\begin{minipage}{0.9\textwidth}
 \begin{haskellcode}
 nand :: forall (a b t :: Interval) -> (x :: Boolean) -> (y :: Boolean)
           -> (  (G a b (x = True /\ y = True) -> G (a + t) False)
              /\ (G a b (x = False \/ y = False)) -> G (a + t) True)
-           \end{haskellcode}
+\end{haskellcode}
+\end{minipage}
+\end{center}
 where \hask{G} is the globally (\( \square \)) modality realized in our envisioned type system.
 As in Jeffrey's presentation, this particular example is a \emph{dependently-typed} example: the true arguments to the function \hask{x} and \hask{y} are used in the type of \hask{nand}, namely in the \emph{equality proofs} passed to \hask{nand} that assert the values of \hask{x} and \hask{y}.
 
 We intend on adapting this LTL-types-FRP perspective to give types the various FRP combinators found in \reactamole as Jeffrey does in his work.
 For example, the type of the combinator \hask{(***)} in our LTL type system might be:
+\begin{center}
+\begin{minipage}{0.75\textwidth}
 \begin{haskellcode}
 (***) :: forall a b c, (A |> B) -> (C |> D) -> (A, C) |> (B D)
 \end{haskellcode}
+\end{minipage}
+\end{center}
 where \hask{T |> U} is Jeffrey's \emph{casual function type} whose output type \hask{U} depend on the history of inputs of type \hask{T}.
 \hask{|>} accurately describes the relationship between the input species and output species of a CRN.
 
