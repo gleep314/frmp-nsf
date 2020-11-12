@@ -57,10 +57,9 @@ If the heartbeat ever stops, the CRN will detect a fault and emit a signal to in
 The watchdog timer CRN consists of several \emph{modules} which are probabilistic signal functions, satisfying a CSL formula.
 One such formula from~\cite{jEKLLLM17} is:
 \[
-    P_{\ge 1}\Box\left(\text{healthy} \rightarrow P_{\le1-\epsilon}\Diamond_{\le t}(\text{hbHigh}\lor\lnot\text{healthy})\right)
+    P_{\ge 1}\Box\left(\text{healthy} \rightarrow P_{\le1-\epsilon}\Diamond_{\le t}(\text{hbHigh}\lor\lnot\text{healthy})\right).
 \]
-which requires that whenever the system being monitored is ``healthy,'' it will produce a heartbeat pulse in the near future with high probability.
-In this work, we will investigate approaches enabling type-directed functional programming that will help us develop stochastic CRNs that satisfy safety properties such as this.
+We will extend our LTL-based type system for DCRNs with appropriate probabilistic constructs from CSL to capture these properties with types.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{FRP and Probabilistic Signals}
