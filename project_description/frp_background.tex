@@ -8,7 +8,7 @@
 In this section, we review the essential characteristics of functional programming that we believe make it an excellent fit for modeling chemical reaction networks.
 We also introduce the fundamentals of functional reactive programming which form the basis of our proposed language design.
 
-\subsection{Characteristics of Functional Programming}
+\paragraph{Characteristics of Functional Programming}
 
 Functional programming encompasses a wide range of practices centered on organizing programs through the composition of functions.
 In this proposal, we focus exclusively on \emph{pure, strong-typed functional programming} as best exemplified by the Haskell programming language.
@@ -26,8 +26,8 @@ Finally, we acknowledged that there is a significant trade-off between language 
 However, in his work, PI Osera and his collaborators have found that the additional information provided by a static type system in this situation can be utilized by \emph{program synthesis techniques}~\cite{osera:thesis:2015} to provide users with rich editing support.
 These tools can help automate much of the tedium and difficulty in navigating the rich types of these languages.
 
+\paragraph{Functional Reactive Programming}
 
-\subsection{Functional Reactive Programming}
 Many systems can be modeled as collections of components interacting with their environment.
 For example, a GUI must respond to mouse clicks from a user, a robot must respond to outside stimuli it perceives through its sensors, a circuit must respond to changes in voltage in its inputs, and concentrations of molecules respond to the presence of other molecules in a beaker according to a set of reactions.
 In traditional systems, this behavior is modeled through explicit management of events, notifications, and behaviors associated with each event.
