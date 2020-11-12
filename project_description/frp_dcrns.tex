@@ -58,7 +58,7 @@ This means that the inputs to a CRN effectively are read-only values which allow
 
 The NAND gate CRN described previously would have type \hask{nand :: DCRN (Bool, Bool) Bool}.
 This type describes, equivalently:
-\begin{itemize}[itemsep=0pt]
+\begin{itemize}[nosep]
   \item A signal function in functional reaction programming that takes pairs of Booleans as input and a Boolean as output.
   \item A deterministic chemical reaction network whose underlying reactants represent a pair of Booleans and products represent a Boolean.
 \end{itemize}
@@ -207,7 +207,7 @@ These core calculi capture the essence of their respective languages while being
 At the same time, these core calculi are expressive enough to program in directly, especially for the small-scale implementation we evision performing to program chemical reaction networks.
 
 These core calculi have the following language features in common that we will implement in \reactamole:
-\begin{itemize}[itemsep=0pt]
+\begin{itemize}[nosep]
   \item Primitive values, \eg, \hask{Unit}, \hask{Boolean}s, \hask{Real}s, \etc
   \item Products, \ie, \( A \times B \) is the type of values that combine an \( A \) with a \( B \).
   \item Sums, \ie, \( A + B \) is the type of values that are either an \( A \) or a \( B \).
