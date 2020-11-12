@@ -5,13 +5,13 @@
 \label{sec:frp_scrns}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-When modeling molecular interactions in small volumes, the deterministic chemical reaction network is often insufficient.
-Consider a volume the size of a mammalian cell where the presence or absence of a single virus molecule in the cell may determine whether it lives or dies.
-Chemical systems in these environments are inherently probabilistic, and therefore modeling chemical reaction networks with \emph{stochastic mass action kinetics} is appropriate~\cite{jGill77,oCSWB09}.
+When modeling molecular interactions in small volumes, the deterministic chemical reaction network is not often suitable for some situations.
+Consider a small volume (such as mammalian cells) where the presence or absence of a single virus molecule may determine whether it lives or dies.
+Chemical systems in these environments are inherently probabilistic, and \emph{stochastic mass action kinetics} is an appropriate~\cite{jGill77,oCSWB09} model instead.
 In a stochastic CRN, molecular counts are modeled discretely, where each state of the CRN is a vector of integral molecular counts.
 Stochastic CRNs are equivalent to many well-known models such as vector addition systems~\cite{oGins66,jKaMiWi67,jKarMil69,jNash73,jLero10,cLero12}, Petri nets~\cite{oPetr62,jMura89,oDavAll10,oReis13}, and population protocols~\cite{jAADFP06,jAAER07,jAnAsEi08,jAnAsEi08a,Doty2018}.
 
-Molecular programmers commonly use stochastic CRNs in roughly two ways.
+Molecular programmers commonly program stochastic CRNs in two different ways.
 The first approach is to use a \emph{leader molecule} to help direct the computation.
 Use of leaders are important in many distributed computing algorithms and have been thoroughly investigated in the context of population protocols~\cite{jAnAsEi08,Doty2018}.
 In stochastic CRNs, a leader molecule is used to enable and disable target stages of the computation to guarantee modularity and prevent interference from different parts of the program.
