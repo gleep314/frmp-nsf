@@ -5,15 +5,16 @@
 \label{sec:software_support}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Several software artifacts will be produced to support the proposed research and ultimately to make the 
-results of the proposed research accessible to the scientific community.
+Several software artifacts will be produced to support the proposed research and ultimately make the results of the proposed research accessible to the scientific community.
 During the first year of the proposed work, we will develop the following software artifacts.
 \begin{enumerate}
-	\item Two Haskell libraries that comprise the completed prototypes of FRP primitives for deterministic and stochastic CRN development.
+	\item \textbf{Two Haskell Libraries}\\
+    These libraries comprise the completed prototypes of FRP primitives for deterministic and stochastic CRN development.
 	Our preliminary investigation and development of these libraries is discussed in Sections~\ref{sub:dcrn_haskell_language} and~\ref{sub:scrn_haskell_language}.
 	We will use the data we collect from these prototypes to inform the development of the other software artifacts.
 	
-	\item Tools for translating high-level CRNs developed in the aforementioned libraries into low-level internal CRN representations and other CRN file formats such as the Systems Biology Markup Language (SBML).
+	\item \textbf{CRN Translation Tools}\\
+    These tools will translate high-level CRNs developed in the aforementioned libraries into low-level internal CRN representations and other CRN file formats such as the Systems Biology Markup Language (SBML).
 	This will ensure our Haskell libraries synergize with existing software tools such as Visual GEC and Matlab Simbiology.
 \end{enumerate}
 
@@ -22,18 +23,10 @@ These languages will include a type system inspired by temporal logics such as S
 Along with these languages, we will develop a fully-featured integrated development environment (IDE) for these languages that builds upon existing software such as Microsoft Visual Studio Code.
 This IDE will support the following features:
 \begin{enumerate}
-	\item Essential language features such as syntax highlighting, static type verification, linting, and tooltips for suggested error corrections.
+	\item Essential language features such as syntax highlighting, static type verification, linting, and tooltips for suggested error corrections
 
-	\item Integrated simulation and testing tools for visualizing the input/output behavior of the CRNs that users develop within the IDE.
+	\item Integrated simulation and testing tools for visualizing the input/output behavior of the CRNs that users develop within the IDE
 \end{enumerate}
 
 We anticipate other software tools will be needed as the research progresses, and these will also be released freely for public use.
 The development of most of these software artifacts are ideal for engaging undergraduate researchers in the project.
-\todo{What else can we say here?}
-
-
-% 5. Software Support for Functional Reactive Molecular Programming
-%     * This may not need its own section
-%     * Do not actually mention Cauldron
-%     * Just mention that we propose to create a deliverable that
-%       gives IDE tooling support for FRP in the MP context
