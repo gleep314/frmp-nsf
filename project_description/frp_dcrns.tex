@@ -33,7 +33,7 @@ Both of these examples regard deterministic CRNs as \emph{signal functions} in f
 \label{sub:dcrn_haskell_language}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We have begun to explore the design of a functional reactive programming language, \reactamole{}, that captures this approach to molecular programming for deterministic CRNs.
-\reactamole{} is currently an embedded domain specific language in Haskell, although we envision a full language design including a type system based on \emph{linear temporal logic} which is commonly used to verify properties of DCRNs.
+\reactamole{} is currently an embedded domain-specific language in Haskell, although we envision a full language design including a type system based on \emph{linear temporal logic}, which is commonly used to verify properties of DCRNs.
 We present our initial findings that help validate FRP as a promising approach to molecular programming and our plan for evolving these findings into a complete language.
 
 \subsubsection{Introducing \reactamole{}}
@@ -48,13 +48,13 @@ Since deterministic CRNs are assumed to be well-mixed, every species ``sees'' ev
 Notably, \reactamole{} hides the choice of particular species from the user, generating fresh species names to ensure that a particular species is not used in a conflicting manner.
 
 A CRN, then, becomes a time-varying function of molecular concentrations, a \emph{signal function}.
-In \reactamole, we realize this with the type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
-Like other ``arrowized'', signal-based FRP implementations such as Yampa~\cite{dominguez:2018:thesis}, \reactamole{} does not provide support for manipulating molecules/signals directly.
-Instead, it provides a set of \emph{primitive signal functions} as well as \emph{combinator functions} that take CRNs/signal functions as input and produce CRNs/signal functions as output.
+In \reactamole, we realize this with the type \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
+Like other ``arrowized,'' signal-based FRP implementations such as Yampa~\cite{dominguez:2018:thesis}, \reactamole{} does not provide support for manipulating molecules/signals directly.
+Instead, it provides a set of \emph{primitive signal functions} and \emph{combinator functions} that take CRNs/signal functions as input and produce CRNs/signal functions as output.
 
 To do this, \reactamole{} works exclusively with the \emph{input/output chemical reaction network} (\emph{I/O CRN}) model of Klinge, Lathrop, and Lutz~\cite{jKlLaLu20}.
 An I/O CRN is a deterministic CRN where reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
-This means that the inputs to a CRN effectively are read-only values which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner.
+This means that the inputs to a CRN effectively are read-only values, which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner.
 
 The NAND gate CRN described previously would have type \hask{nand :: DCRN (Bool, Bool) Bool}.
 This type describes, equivalently:
@@ -153,11 +153,11 @@ For example, lifting a Haskell-based definition of \hask{&&}, the logical AND fu
     \begin{subfigure}[t]{0.48\textwidth}
         \begin{minipage}[t][1in][b]{0.48\textwidth}
             \begin{BVerbatim}
-      2x5 + ~x5 -[3.0e-2]-> 3x5
-      x5 + 2~x5 -[3.0e-2]-> 3~x5
-      x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
-      ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
-      ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+    2x5 + ~x5 -[3.0e-2]-> 3x5
+    x5 + 2~x5 -[3.0e-2]-> 3~x5
+    x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
+    ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+    ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
             \end{BVerbatim}
         \end{minipage}
     \end{subfigure}
@@ -171,19 +171,19 @@ For example, lifting a Haskell-based definition of \hask{&&}, the logical AND fu
 \end{figure}
 
 \subsection{From Prototype to Complete Language}
-\reactamole{} in its current state is an embedded domain specific language for programming deterministic CRNs using signal-based FRP that supports Boolean and pair types.
+\reactamole{} in its current state is an embedded domain-specific language for programming deterministic CRNs using signal-based FRP that supports Boolean and pair types.
 Also, the static type system of Haskell immediately gives us some level of safety guarantees.
 For example, we cannot feed a signal encoding a Boolean to a CRN expecting a pair.
 
 With sufficient gumption, we can encode other types and more complicated programs using Booleans and pairs alone.
 In addition to concerns of inefficiency, working solely in Booleans is akin to programming in circuits directly and does not fully harness the \emph{analog} nature of computational biology.
-Furthermore, the properties that we check via types in \reactamole{} are relatively simple---is a CRN fed inputs of the appropriate type?
+Furthermore, the properties that we check via types in \reactamole{} are relatively simple---is a CRN fed input of the appropriate type?
 Programming with CRNs is more difficult than conventional programming not only because of the physical substrate, but because of the need to account for \emph{timing} in our computations.
-For example, our orrectness guarantees need to account for \emph{delay} that accumulates in the network of reactions.
+For example, our correctness guarantees need to account for the \emph{delay} that accumulates in the network of reactions.
 
 To this end, we propose extending \reactamole{} along two dimensions:
 (1) Implement additional types so that it approaches a core, functional programming language, and
-(2) developing a type system based on \emph{linear temporal logic} which is commonly used to verify CRNs.
+(2) developing a type system based on \emph{linear temporal logic}, which is commonly used to verify CRNs.
 By pursuing these two dimensions, we intend to evolve \reactamole from an embedded Haskell DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
 
 \subsubsection{Representing Additional Types with Species}
@@ -198,13 +198,13 @@ For example, integration with \hask{Real} values represented as single species c
 The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \): \( X \goesto{} X + Y \).
 
 In contrast, addition over \hask{Real}s is impossible to implement directly for unknown inputs.
-In order to accomplish this, the I/O CRN would not only need the real-valued concentrations of its input signal, but also their \emph{derivatives}.
+In this case, not only are the real-valued input concentrations required by the I/O CRN, the \emph{derivatives} of these signals are also required.
 Thus, designing an appropriate set of primitives and associated operations for \reactamole{} will require careful consideration of what is necessary to enable a wide variety of programs while also adhering to the limits of our molecular context.
 
 Ultimately, our goal is to implement suitable representations for enough types so that \reactamole is similar in expressive power to core, functional programming languages in the literature such as Haskell's SystemFC~\cite{weirich:2013:fc} and Core ML for OCaml~\cite{remy:2001:ocaml}.
-These core calculi capture the essence of their respective languages while being minimal in size which allows us to study their properties while having confidence that we haven't lost anything essential in translation.
+These core calculi capture the essence of their respective languages while being minimal in size, which allows us to study their properties while having confidence that we have not lost anything essential in translation.
 \reactamole could then serve as an intermediate language, like SystemFC, for an eventual surface language that exposes the FRP nature of CRNs in a more user-friendly way.
-At the same time, these core calculi are expressive enough to program in directly, especially for the small-scale implementation we evision performing to program chemical reaction networks.
+Simultaneously, these core calculi are expressive enough to use directly, especially for the small-scale implementation we envision performing to program chemical reaction networks.
 
 These core calculi have the following language features that we will implement in \reactamole:
 \begin{itemize}[nosep]
@@ -219,12 +219,12 @@ In contrast, a \hask{List} has two tags denoting the empty and non-empty lists.
 In the non-empty case, the algebraic data type also specifies the \emph{head} element of the list and its \emph{tail}, the remainder of the list.
 
 Algebraic data types will be of particular interest to us in our exploration of realizing functional programming with CRNs.
-The primary operation we perform over these structures is \emph{pattern matching} which amounts to selecting a branch of a program based on the tag of the datatype.
+The primary operation we perform over these structures is \emph{pattern matching}, which amounts to selecting a branch of a program based on the tag of the datatype.
 This requires that our underlying CRNs are careful constructed so that they respect the delay involved in computing the datatype \emph{before} selecting a branch to execute.
 
 \subsubsection{A Type System Based on Linear Temporal Logic}
 In Ellis, Klinge, and Lathrop's paper on robust chemical circuits~\cite{rdc}, they formally define the requirements of a NAND gate.
-Their definition can easily be written in \emph{signal temporal logic} (\emph{STL})~\cite{donze2013,donze2015} which is almost identical to LTL except that it tailored to systems with continuous state spaces.
+Their definition can easily be written in \emph{signal temporal logic} (\emph{STL})~\cite{donze2013,donze2015}, which is almost identical to LTL except that it tailored to systems with continuous state spaces.
 The requirement of the NAND gate can simply be written \( \Box(\phi_1 \land \phi_2) \) where \( \phi_1 \) and \( \phi_2 \) are two STL expressions that describe the two cases of the truth table of a NAND gate.
 These expressions can be written:
 \begin{align*}
@@ -245,7 +245,7 @@ As a result, the signal function that satisfies this formula ``lifts'' the follo
 \]
 FRP combinators such as \hask{>>>}, \hask{&&&}, and \hask{***} allows combining NAND signal functions to implement any finite combinational Boolean signal function.
 The authors of~\cite{rdc} painstakingly proved that the composition of these signal functions transforms their input signals into the appropriate output signals.
-Such verification is tedious and error prone to carry out by hand.
+Such verification is tedious and error-prone to carry out by hand.
 
 We propose the design of a rich type system based on linear temporal logic to aid in the development of CRNs in \reactamole.
 The starting point for our design comes from the observation made by Jeffrey~\cite{jeffrey2012} and Jeltsch~\cite{jeltsch:2011:talk} that \emph{Linear Temporal Logic is a type system for Functional Reactive Programming} according to the Curry-Howard Isomorphism~\cite{howard:1980:isomorphism}.
@@ -264,7 +264,7 @@ nand :: forall (a b t :: Interval) -> (x :: Boolean) -> (y :: Boolean)
 where \hask{G} is the globally (\( \square \)) modality realized in our envisioned type system.
 As in Jeffrey's presentation, this particular example is a \emph{dependently-typed} example: the true arguments to the function \hask{x} and \hask{y} are used in the type of \hask{nand}, namely in the \emph{equality proofs} passed to \hask{nand} that assert the values of \hask{x} and \hask{y}.
 
-We intend on adapting this LTL-types-FRP perspective to give types to the various FRP combinators found in \reactamole as Jeffrey does in his work.
+We intend to adapt this LTL-types-FRP perspective to give types to the various FRP combinators found in \reactamole as Jeffrey does in his work.
 For example, the type of the combinator \hask{(***)} in our LTL type system might be:
 \begin{center}
 \begin{minipage}{0.75\textwidth}
@@ -277,9 +277,9 @@ where \hask{T |> U} is Jeffrey's \emph{casual function type} whose output type \
 \hask{|>} accurately describes the input/output relationship of a CRN.
 
 However, the difficulty of rich typing is evident in the type of \hask{nand}: rich types that describe rich properties are difficult to work with!
-While we intend on exploring the viability of this \emph{complete verification} style of LTL typing, we are also interested in looking at simplifications of this LTL-inspired type system that can \emph{partially verify} important program properties.
-For example, in our NAND example, we briefly introduced the notion of propogation delay of input/output signals.
-As a first step, we intend on building a limited LTL-inspired type system that verifies that CRN's are correct \emph{up to their computed propogation delays}.
+While we intend to explore the viability of this \emph{complete verification} style of LTL typing, we are also interested in looking at simplifications of this LTL-inspired type system that can \emph{partially verify} important program properties.
+For example, in our NAND example, we briefly introduced the notion of propagation delay of input/output signals.
+As a first step, we intend to build a limited LTL-inspired type system that verifies that CRN's are correct \emph{up to their computed propagation delays}.
 From there, we will grow our type system to handle more interesting properties, such as those that we discover during our initial experimentation with the language.
 
 % \paragraph{Example: Verifying NFAs}
