@@ -12,6 +12,12 @@
 \usepackage{fancyvrb}
 \usepackage{xcolor}
 
+% For centered minted environments: cminted
+\usepackage{xpatch,letltxmacro}
+\LetLtxMacro{\cminted}{\minted}
+\let\endcminted\endminted
+\xpretocmd{\cminted}{\RecustomVerbatimEnvironment{Verbatim}{BVerbatim}{}}{}{}
+
 \newcommand{\bnfalt}{\;\mathrel{\mid}\;}
 \newcommand{\bnfdef}{%
   \mathrel{\!\colon\!\!\colon\!\mathord{=}}%
