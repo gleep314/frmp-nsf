@@ -20,7 +20,7 @@ Since this reaction has a positive net effect on \( Y \) and a negative net effe
 Commonly, deterministic CRNs and GPACs receive their input via an \emph{initial state} (at time zero), process it, and present their output at some future time \( t \).
 For the CRN computing the minimum function above, the concentration of its output \( Y \) converges to the appropriate value as \( t \) approaches infinity.
 However, deterministic CRNs and GPACs can also be regarded as \emph{signal processors} that receive a continuously varying input signal, while producing a continuous output signal in real time.
-This characterization of computation with deterministic CRNs is used in~\cite{jKlLaLu20} to show that any nondeterministic finite automaton can be simulated in real time by a deterministic CRN.
+This characterization of computation with deterministic CRNs is used in~\cite{jKlLaLu20} to show that any nondeterministic finite automaton can be simulated by a deterministic CRN.
 These CRNs receive their input strings as a sequence of \emph{pulses} and change their internal state in response to each input event.
 % In the terminology of FRP, each NFA-simulating deterministic CRN is literally a \emph{signal function} that, when given a valid input signal, produces an output signal that encodes each of the state transitions of the NFA while it processes its input.
 Another example of using deterministic CRNs in this way is~\cite{rdc} which implements arbitrary combinational circuits that react in real time to their input signals and produce output signals in response according to traditional logic gates.
@@ -28,36 +28,33 @@ Another example of using deterministic CRNs in this way is~\cite{rdc} which impl
 % \todo{Consider removing the previous sentence or finding relevant citations to back it up}
 Both of these examples regard deterministic CRNs as \emph{signal functions} in functional reactive programming terms.
 
-\todo{Titus needs to continue editing here...}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\reactamole{}: A FRP Language for DCRNs}
 \label{sub:dcrn_haskell_language}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 We have begun to explore the design of a functional reactive programming language, \reactamole{}, that captures this approach to molecular programming for deterministic CRNs.
-\reactamole is currently an embdded domain specific language in Haskell although we envision a full language design including a type system based on \emph{temporal linear logic} which is commonly used to verify properties of DCRNs.
+\reactamole{} is currently an embedded domain specific language in Haskell, although we envision a full language design including a type system based on \emph{linear temporal logic} which is commonly used to verify properties of DCRNs.
 We present our initial findings that help validate FRP as a promising approach to molecular programming and our plan for evolving these findings into a complete language.
 
 \subsubsection{Introducing \reactamole{}}
-
 The following key insight motives our design of \reactamole{}:
 \begin{displayquote}
 A chemical reaction network is a signal function in a functional reactive program over molecule concentrations.
 \end{displayquote}
 In our interpretation of molecular programming, molecules and their concentrations serve as \emph{signals} that encode values of various types.
-For example, to represent a value of boolean type (\hask{Bool} in Haskell), we use two species in tandem in a \emph{dual-rail representation}~\todo{cite?}, designating one species as the ``hi'' wire and the other as the ``lo'' wire.
-Pairs of values (of polymorphic Haskell type \hask{(a, b)}), in contrast, are simply two species that exist in the beaker together.
-Because of the physical nature of a deterministic CRN---concentrations are high enough so that, effectively, every species ``sees'' every other species in the beaker---we do not need to impose additional structure to capture pairs!
+For example, to represent a value of Boolean type (\hask{Bool} in Haskell), we use two species in tandem in a \emph{dual-rail representation}, designating one species as the ``hi'' wire and the other as the ``lo'' wire~\cite{jMagn97,cKlin16,rdc,jKlLaLu20}.
+In contrast, pairs of values (of polymorphic Haskell type \hask{(a, b)}) are simply two species that exist in the beaker together.
+Since deterministic CRNs are assumed to be well-mixed, every species ``sees'' every other species in the beaker, and we do not need to impose additional structure to capture pairs.
 Notably, \reactamole{} hides the choice of particular species from the user, generating fresh species names to ensure that a particular species is not used in a conflicting manner.
 
-A CRN, then, becomes a time-varying function of molecules, a \emph{signal function}.
+A CRN, then, becomes a time-varying function of molecular concentrations, a \emph{signal function}.
 In \reactamole, we realize this with the type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
 Like other ``arrowized'', signal-based FRP implementations such as Yampa~\cite{dominguez:2018:thesis}, \reactamole{} does not provide support for manipulating molecules/signals directly.
-Instead, it provides a set \emph{primitive signal functions} as well as \emph{combinator functions} that take CRNs/signal function as input and produce CRNs/signal functions as output.
+Instead, it provides a set of \emph{primitive signal functions} as well as \emph{combinator functions} that take CRNs/signal functions as input and produce CRNs/signal functions as output.
 
-To do this, \reactamole{} works exclusively with the \emph{I/O CRN} model of Ellis, Klinge, and Lathrop~\cite{rdc}.
-In an I/O CRN, reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
-This means that the inputs to a CRN effectively as read-only values which allows \reactamole{}'s combinator to manipulate CRNs in a functional manner, avoiding thorny issues, such as race conditions between reactants.
-\todo{Titus: can you add a few sentences here about the known restrictions of I/O CRNs and how essential our choice of the I/O CRN model here is?}
+To do this, \reactamole{} works exclusively with the \emph{input/output chemical reaction network} (\emph{I/O CRN}) model of Klinge, Lathrop, and Lutz~\cite{jKlLaLu20}.
+An I/O CRN is a deterministic CRN where reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
+This means that the inputs to a CRN effectively are read-only values which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner, avoiding thorny issues such as race conditions between reactants.
 
 As an example, the NAND gate CRN described previously would have type:
 \begin{haskellcode}
@@ -65,13 +62,13 @@ nand :: DCRN (Bool, Bool) Bool
 \end{haskellcode}
 This type describes, equivalently:
 \begin{itemize}[itemsep=0pt]
-  \item A signal function in functional reaction programming that takes pairs of booleans as input and a boolean as output.
-  \item A deterministic chemical reaction network whose underlying reactants represent a pair of booleans and products represent a boolean.
+  \item A signal function in functional reaction programming that takes pairs of Booleans as input and a boolean as output.
+  \item A deterministic chemical reaction network whose underlying reactants represent a pair of Booleans and products represent a Boolean.
 \end{itemize}
-\reactamole{} provides \hask{nand} as a primitive whose underlying implementation is the description of a robust \hask{nand} I/O CRN designed by Ellis, \etal~\cite{rdc}.
+\reactamole{} provides \hask{nand} as a primitive whose underlying implementation is the description of a robust \hask{nand} I/O CRN designed by Ellis, Klinge, and Lathrop~\cite{rdc}.
 
-\hask{nand} is universal for boolean logic, so we can use this primitive to write other functions between booleans.
-For example, we can define a DCRN that acts as a \emph{S-R latch} in \reactamole{} as follows:
+\hask{nand} is universal for Boolean logic, so we can use this primitive to write other functions between Booleans.
+For example, we can define a deterministic CRN that acts as an \emph{S-R latch} in \reactamole{} as follows:
 \begin{haskellcode}
 srlatch :: DCRN (Bool, Bool) Bool
 srlatch = proc (sn, rn) -> do
@@ -91,10 +88,10 @@ For example, the \emph{split arrow} combinator has type:
 (***) :: DCRN a b -> DCRN a' b' -> DCRN (a, a') (a', b')
 f *** g = return $ DCRN (reactions f ++ reactions g)
 \end{haskellcode}
-That is, the combinator comes two DCRNs by pairing their inputs and outputs together.
+That is, the combinator combines two DCRNs by pairing their inputs and outputs together.
 Because \reactamole{} maintains ``freshness'' of species names and we work with I/O CRNs whose reactants are catalytic, we obtain the behavior of split arrow by creating a new CRN generated from the \emph{union} of the two input CRNs.
-We have also implemented the lifting function of arrows \hask{arr} but specialized to booleans.
-This implementation utilizes \hask{nand} to take \emph{any} boolean function written in Haskell and translate it into an appropriate CRN.
+We have also implemented the lifting function of arrows \hask{arr} but specialized to Booleans.
+This implementation utilizes \hask{nand} to take \emph{any} Boolean function written in Haskell and translate it into an appropriate CRN.
 For example, lifting a Haskell-based definition of \hask{&&}, the logical AND function, \hask{arr2 (&&)} yields a CRN whose underlying \reactamole{} implementation is given in~\autoref{fig:and-crn}.
 
 \begin{figure}
