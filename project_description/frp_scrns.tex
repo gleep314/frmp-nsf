@@ -35,10 +35,14 @@ Our initial work producing a variant of \reactamole{} for stochastic CRNs is bas
 We developed a second Haskell library akin to \reactamole{} with a datatype \hask{SCRN a b} that represents a pure function, transforming inputs of type \hask{a} into outputs of type \hask{b}.
 This library currently supports \hask{Int}s, dual-rail \hask{Bool}s, and pairs \hask{(a,b)}, and includes primitive stochastic CRNs inspired by~\cite{cChDoSo12} and various combinators such as \hask{>>>}, \hask{&&&}, and \hask{***}.
 For example, the so-called ``hailstone'' function from the famous Collatz conjecture can be defined with:
+\begin{center}
+\begin{minipage}{0.9\textwidth}
 \begin{haskellcode}
 hailstone :: SCRN Int Int
 hailstone = (is_even &&& (divide 2 &&& (multiply 3 >>> add 1))) >>> mux
 \end{haskellcode}
+\end{minipage}
+\end{center}
 Our prototype library enforces that each functions input/output types match.
 For example, \hask{mux} has a type signature of \hask{SCRN (Bool (Int, Int)) Int} and connects the appropriate value to the output based on the value of the \hask{Bool} parameter.
 Each stage of the stochastic CRN computation is implicitly directed by an unnamed leader molecule, generated when the \hask{SCRN a b} datatype is compiled to a low-level CRN.
