@@ -62,7 +62,7 @@ nand :: DCRN (Bool, Bool) Bool
 \end{haskellcode}
 This type describes, equivalently:
 \begin{itemize}[itemsep=0pt]
-  \item A signal function in functional reaction programming that takes pairs of Booleans as input and a boolean as output.
+  \item A signal function in functional reaction programming that takes pairs of Booleans as input and a Boolean as output.
   \item A deterministic chemical reaction network whose underlying reactants represent a pair of Booleans and products represent a Boolean.
 \end{itemize}
 \reactamole{} provides \hask{nand} as a primitive whose underlying implementation is the description of a robust \hask{nand} I/O CRN designed by Ellis, Klinge, and Lathrop~\cite{rdc}.
@@ -134,19 +134,28 @@ For example, lifting a Haskell-based definition of \hask{&&}, the logical AND fu
 % \end{figure*}
 
 \begin{figure}
-\begin{center}
-\begin{BVerbatim}
-2x4 + ~x4 -[3.0e-2]-> 3x4
-x4 + 2~x4 -[3.0e-2]-> 3~x4
-x0 + x1 + x4 -[1.0e-2]-> x0 + x1 + ~x4
-~x0 + ~x4 -[1.0e-2]-> ~x0 + x4
-~x1 + ~x4 -[1.0e-2]-> ~x1 + x4
-2x5 + ~x5 -[3.0e-2]-> 3x5
-x5 + 2~x5 -[3.0e-2]-> 3~x5
-x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
-~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
-~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
-\end{BVerbatim}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{minipage}[t][1in][b]{0.48\textwidth}
+            \begin{BVerbatim}
+  2x4 + ~x4 -[3.0e-2]-> 3x4
+  x4 + 2~x4 -[3.0e-2]-> 3~x4
+  x0 + x1 + x4 -[1.0e-2]-> x0 + x1 + ~x4
+  ~x0 + ~x4 -[1.0e-2]-> ~x0 + x4
+  ~x1 + ~x4 -[1.0e-2]-> ~x1 + x4
+            \end{BVerbatim}
+        \end{minipage}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.48\textwidth}
+        \begin{minipage}[t][1in][b]{0.48\textwidth}
+            \begin{BVerbatim}
+      2x5 + ~x5 -[3.0e-2]-> 3x5
+      x5 + 2~x5 -[3.0e-2]-> 3~x5
+      x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
+      ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+      ~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+            \end{BVerbatim}
+        \end{minipage}
+    \end{subfigure}
 \caption{The generated CRN from lifting logical AND, \hask{arr2 (&&)}.
   \hask{x0}, \hask{~x0}, \hask{x1}, \hask{~x1} are the dual-rail species of the inputs to \hask{(&&)}.
   \hask{x5} and \hask{~x5} are the dual-rail species of the output.
@@ -154,7 +163,6 @@ x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
   The \hask{nand} gate uses the implementation of~\cite{rdc} and consists of five reactions.
   }
 \label{fig:and-crn}
-\end{center}
 \end{figure}
 
 \subsection{From Prototype to Complete Language}
