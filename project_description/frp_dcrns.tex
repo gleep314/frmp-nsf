@@ -190,7 +190,7 @@ However, we can encode a \hask{Real} directly using a single species concentrati
 For each such type we encode as a primitive, we will also need to provide a set of primitive operations over that type.
 However, because of the differences in physical substrate, this set of operations will necessarily be different than with traditional digital computation.
 For example, integration with \hask{Real} values represented as single species concentrations is trivial to implement.
-The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \):
+The following one-reaction CRN implements integration for input signal \( X \) and output signal \( Y \):
 \[
   X \goesto{} X + Y
 \]
@@ -203,7 +203,7 @@ These core calculi capture the essence of their respective languages while being
 \reactamole could then serve as an intermediate language, like SystemFC, for an eventual surface language that exposes the FRP nature of CRNs in a more user-friendly way.
 At the same time, these core calculi are expressive enough to program in directly, especially for the small-scale implementation we evision performing to program chemical reaction networks.
 
-These core calculi have the following language features in common that we will implement in \reactamole:
+These core calculi have the following language features that we will implement in \reactamole:
 \begin{itemize}[itemsep=0pt]
   \item Primitive values, \eg, \hask{Unit}, \hask{Boolean}s, \hask{Real}s, \etc
   \item Products, \ie, \( A \times B \) is the type of values that combine an \( A \) with a \( B \).
@@ -229,10 +229,10 @@ These expressions can be written:
     \phi_2 &= \Box_{[a,b]} (X_1 = 0 \lor X_2 = 0)  \rightarrow \Box_{[a+\tau, b]} (Y = 1),
 \end{align*}
 where \( X_1, \overline{X}_1, X_2, \overline{X}_2  \) are the input species of the NAND gate and \( Y, \overline{Y} \) are the output species.
-Intuitively, the combined STL statement \( \Box(\phi_1 \land \phi_2) \) says that whenever the Boolean inputs are \( X_1 = 1 \) and \( X_2 = 1 \) during the interval \( [a,b] \), then the output signal must hold \( Y = 0 \) during the interval \( [a+\tau, b] \).
+Intuitively, the STL formula \( \Box(\phi_1 \land \phi_2) \) says that whenever the Boolean inputs are \( X_1 = 1 \) and \( X_2 = 1 \) during the interval \( [a,b] \), then the output signal must hold \( Y = 0 \) during the interval \( [a+\tau, b] \).
 The constant \( \tau \) is called the \emph{propagation delay} and describes how responsive a NAND gate is to its inputs changing.
 Notice that whenever the input signal contains an input event such as \( \Box_{[a,b]}(X_1 = 1 \land X_2 = 1) \), then the output signal produces an output event \( \Box_{[a+\tau, b]}(Y = 0) \).
-As a result, the signal function that fulfills this specification ``lifts'' the following pure function into a CRN:
+As a result, the signal function that satisfies this formula ``lifts'' the following pure function into a CRN:
 \[
     f(x_1, x_2) =
     \begin{cases}
@@ -240,11 +240,11 @@ As a result, the signal function that fulfills this specification ``lifts'' the 
         1, &\text{ otherwise}
     \end{cases}.
 \]
-Combining such CRNs with FRP combinators such as \hask{>>>}, \hask{&&&}, and \hask{***} combines these signal functions into new signal functions that can implement any finite combinational Boolean function.
+FRP combinators such as \hask{>>>}, \hask{&&&}, and \hask{***} allows combining NAND signal functions to implement any finite combinational Boolean signal function.
 The authors of~\cite{rdc} painstakingly proved that the composition of these signal functions transforms their input signals into the appropriate output signals.
-
 Such verification is tedious and error prone to carry out by hand.
-Instead, we propose the design of a rich type system based on linear temporal logic to aid in the development of CRNs in \reactamole.
+
+We propose the design of a rich type system based on linear temporal logic to aid in the development of CRNs in \reactamole.
 The starting point for our design comes from the observation made by Jeffrey~\cite{jeffrey2012} and Jeltsch~\cite{jeltsch:2011:talk} that \emph{Linear Temporal Logic is a type system for Functional Reactive Programming} according to the Curry-Howard Isomorphism~\cite{howard:1980:isomorphism}.
 The Curry-Howard Isomorphism posits that a logic has a dual interpretation as a type system of some programming language.
 Likewise, proofs in that logic can also be thought of as programs in that language.
@@ -257,13 +257,13 @@ nand :: forall (a b t :: Interval) -> (x :: Boolean) -> (y :: Boolean)
 where \hask{G} is the globally (\( \square \)) modality realized in our envisioned type system.
 As in Jeffrey's presentation, this particular example is a \emph{dependently-typed} example: the true arguments to the function \hask{x} and \hask{y} are used in the type of \hask{nand}, namely in the \emph{equality proofs} passed to \hask{nand} that assert the values of \hask{x} and \hask{y}.
 
-We intend on adapting this LTL-types-FRP perspective to give types the various FRP combinators found in \reactamole as Jeffrey does in his work.
+We intend on adapting this LTL-types-FRP perspective to give types to the various FRP combinators found in \reactamole as Jeffrey does in his work.
 For example, the type of the combinator \hask{(***)} in our LTL type system might be:
 \begin{haskellcode}
 (***) :: forall a b c, (A |> B) -> (C |> D) -> (A, C) |> (B D)
 \end{haskellcode}
-where \hask{T |> U} is Jeffrey's \emph{casual function type} whose output type \hask{U} depend on the history of inputs of type \hask{T}.
-\hask{|>} accurately describes the relationship between the input species and output species of a CRN.
+where \hask{T |> U} is Jeffrey's \emph{casual function type} whose output type \hask{U} depends on the history of inputs of type \hask{T}.
+\hask{|>} accurately describes the input/output relationship of a CRN.
 
 However, the difficulty of rich typing is evident in the type of \hask{nand}: rich types that describe rich properties are difficult to work with!
 While we intend on exploring the viability of this \emph{complete verification} style of LTL typing, we are also interested in looking at simplifications of this LTL-inspired type system that can \emph{partially verify} important program properties.
