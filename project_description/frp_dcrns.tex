@@ -39,51 +39,86 @@ We present our initial findings that help validate FRP as a promising approach t
 
 \subsubsection{Introducing \reactamole{}}
 
-% 1. Choice of representations in Reactamole.
-% 2. Examples of constructs in Reactamole.
-% 3. Discussion of benefits gained so far.
-
 The following key insight motives our design of \reactamole{}:
 \begin{displayquote}
 A chemical reaction network is a signal function in a functional reactive program over molecule concentrations.
 \end{displayquote}
-In our FRP interpretation of molecular programming, molecules and their concentrations serve as signals that encode values of various types.
-A CRN, then, becomes a time-varying function of values, a \emph{signal function}.
-In \reactamole, we realize this with the type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
-This is comparable to the signal function type found in many FRP libraries, \eg, \hask{SF a b} as defined in Yampa.
-The various FRP combinators over signal function then take CRNs as input and produce CRNs as output.
+In our interpretation of molecular programming, molecules and their concentrations serve as \emph{signals} that encode values of various types.
+For example, to represent a value of boolean type (\hask{Bool} in Haskell), we use two species in tandem in a \emph{dual-rail representation}~\todo{cite?}, designating one species as the ``hi'' wire and the other as the ``lo'' wire.
+Pairs of values (of polymorphic Haskell type \hask{(a, b)}), in contrast, are simply two species that exist in the beaker together.
+Because of the physical nature of a deterministic CRN---concentrations are high enough so that, effectively, every species ``sees'' every other species in the beaker---we do not need to impose additional structure to capture pairs!
+Notably, \reactamole{} hides the choice of particular species from the user, generating fresh species names to ensure that a particular species is not used in a conflicting manner.
 
-For example, the NAND gate CRN described above would have type:
+A CRN, then, becomes a time-varying function of molecules, a \emph{signal function}.
+In \reactamole, we realize this with the type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
+Like other ``arrowized'', signal-based FRP implementations such as Yampa~\cite{dominguez:2018:thesis}, \reactamole{} does not provide support for manipulating molecules/signals directly.
+Instead, it provides a set \emph{primitive signal functions} as well as \emph{combinator functions} that take CRNs/signal function as input and produce CRNs/signal functions as output.
+
+To do this, \reactamole{} works exclusively with the \emph{I/O CRN} model of Ellis, Klinge, and Lathrop~\cite{rdc}.
+In an I/O CRN, reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
+This means that the inputs to a CRN effectively as read-only values which allows \reactamole{}'s combinator to manipulate CRNs in a functional manner, avoiding thorny issues, such as race conditions between reactants.
+\todo{Titus: can you add a few sentences here about the known restrictions of I/O CRNs and how essential our choice of the I/O CRN model here is?}
+
+As an example, the NAND gate CRN described previously would have type:
 \begin{haskellcode}
 nand :: DCRN (Bool, Bool) Bool
 \end{haskellcode}
+This type describes, equivalently:
+\begin{itemize}[itemsep=0pt]
+  \item A signal function in functional reaction programming that takes pairs of booleans as input and a boolean as output.
+  \item A deterministic chemical reaction network whose underlying reactants represent a pair of booleans and products represent a boolean.
+\end{itemize}
+\reactamole{} provides \hask{nand} as a primitive whose underlying implementation is the description of a robust \hask{nand} I/O CRN designed by Ellis, \etal~\cite{rdc}.
 
-This says that \hask{nand} is a deterministic CRN that receives an input signal that encodes two Boolean values at all times and produces a new signal that is the conjunction of these two signals at all times \( t \).
-If the \hask{DCRN} type is an instance of Yampa's \hask{Arrow} and \hask{ArrowLoop} typeclasses, then it is possible to construct an S-R latch by combining two \hask{nand} CRNs together using the following syntax:
-
+\hask{nand} is universal for boolean logic, so we can use this primitive to write other functions between booleans.
+For example, we can define a DCRN that acts as a \emph{S-R latch} in \reactamole{} as follows:
 \begin{haskellcode}
 srlatch :: DCRN (Bool, Bool) Bool
 srlatch = proc (sn, rn) -> do
-    rec q  <- ynand -< (sn, qn)
-        qn <- ynand -< (rn, q)
+    rec q  <- nand -< (sn, qn)
+        qn <- nand -< (rn, q)
     returnA -< q
 \end{haskellcode}
+This code takes advantage of the \emph{arrows} combinators of Hughes~\cite{hughes:2000:arrows} that \reactamole{} implements and Haskell provides special syntax for via the \hask{Arrows} extension.
+\hask{srlatch} is defined to be the composition of two \hask{nand}s set in a \emph{feedback loop}.
+The arrow binding \hask{q <- nand -< (sn, qn)} sends the input \hask{(sn, qn)} to \hask{nand} and names the output \hask{q} for further computation.
+A looping network of signals is defined with the \hask{rec} keyword which then allows the bindings to mutually refer to each other.
+Finally, \hask{returnA -< q} returns \hask{q} from the function.
 
-The definition of \hask{DCRN} in our preliminary work is:
+In our initial exploration, we have implemented all of the arrow combinators of Hughes as transformations over I/O CRNs.
+For example, the \emph{split arrow} combinator has type:
 \begin{haskellcode}
-data DCRN a b = DCRN { reactions :: [Reaction]
-                     , inputs    :: Species a
-                     , outputs   :: Species b  }
+(***) :: DCRN a b -> DCRN a' b' -> DCRN (a, a') (a', b')
+f *** g = return $ DCRN (reactions f ++ reactions g)
 \end{haskellcode}
-where \hask{reactions} is a list of \hask{Reaction}s that store the reactants, products, and rate constant of each reaction, and where \hask{Species} is a parameterized type defined by
-\begin{haskellcode}
-data Species a where
-    BoolSpecies   :: Name -> Name -> Species Bool
-    DoubleSpecies :: Name -> Species Double
-    PairSpecies   :: Species a -> Species b -> Species (a, b)
-\end{haskellcode}
+That is, the combinator comes two DCRNs by pairing their inputs and outputs together.
+Because \reactamole{} maintains ``freshness'' of species names and we work with I/O CRNs whose reactants are catalytic, we obtain the behavior of split arrow by creating a new CRN generated from the \emph{union} of the two input CRNs.
+We have also implemented the lifting function of arrows \hask{arr} but specialized to booleans.
+This implementation utilizes \hask{nand} to take \emph{any} boolean function written in Haskell and translate it into an appropriate CRN.
+For example, lifting a Haskell-based definition of \hask{&&}, the logical AND function, \hask{arr2 (&&)} yields a CRN whose underlying \reactamole{} implementation is given in~\autoref{fig:and-crn}.
 
-\subsection{From Prototype to Compelete Language}
+\begin{figure}
+\begin{center}
+\begin{BVerbatim}
+2x4 + ~x4 -[3.0e-2]-> 3x4
+x4 + 2~x4 -[3.0e-2]-> 3~x4
+x0 + x1 + x4 -[1.0e-2]-> x0 + x1 + ~x4
+~x0 + ~x4 -[1.0e-2]-> ~x0 + x4
+~x1 + ~x4 -[1.0e-2]-> ~x1 + x4
+2x5 + ~x5 -[3.0e-2]-> 3x5
+x5 + 2~x5 -[3.0e-2]-> 3~x5
+x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
+~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+~x4 + ~x5 -[1.0e-2]-> ~x4 + x5
+\end{BVerbatim}
+\caption{The generated CRN from lifting logical AND, \hask{arr2 (&&)}.
+  \hask{x0}, \hask{~x0}, \hask{x1}, \hask{~x1} are the dual-rail species of the inputs to \hask{(&&)}.
+  \hask{x5} and \hask{~x5} are the dual-rail species of the output.}
+\label{fig:and-crn}
+\end{center}
+\end{figure}
+
+\subsection{From Prototype to Complete Language}
 
 \begin{itemize}[itemsep=0pt]
   \item Shape of target language and missing features.
