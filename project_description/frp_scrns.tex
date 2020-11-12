@@ -8,7 +8,7 @@
 When modeling molecular interactions in small volumes, the deterministic chemical reaction network is not often suitable for some situations.
 Consider a small volume (such as mammalian cells) where the presence or absence of a single virus molecule may determine whether it lives or dies.
 Chemical systems in these environments are inherently probabilistic, and \emph{stochastic mass action kinetics} is an appropriate~\cite{jGill77,oCSWB09} model instead.
-In a stochastic CRN, molecular counts are modeled discretely, where each state of the CRN is a vector of integral molecular counts.
+In a stochastic CRN, molecular counts are modeled with a continuous-time Markov chain (CTMC), where each state of the Markov chain represents a vector of integral molecular counts, and the rates between each state are determined by the \emph{law of mass action}.
 Stochastic CRNs are equivalent to many well-known models such as vector addition systems~\cite{oGins66,jKaMiWi67,jKarMil69,jNash73,jLero10,cLero12}, Petri nets~\cite{oPetr62,jMura89,oDavAll10,oReis13}, and population protocols~\cite{jAADFP06,jAAER07,jAnAsEi08,jAnAsEi08a,Doty2018}.
 
 Molecular programmers commonly program stochastic CRNs in two different ways.
@@ -22,45 +22,36 @@ The second approach is to embrace the stochasticity of the model and harness it 
 For example, in~\cite{CAPPELLETTI202064}, the authors exploit the stochastic nature of these CRNs to implement arbitrary probability distributions at the nanoscale.
 In~\cite{cWinfe19}, the author harnesses this stochasticity to solve a variety of optimization and constraint satisfaction problems.
 
-Since programming with stochastic CRNs is fundamentally different than with deterministic CRNs, the use of functional reactive programming will also be inherently different.
+Since programming with stochastic CRNs is fundamentally different than deterministic CRNs, the use of functional reactive programming will necessarily be different.
 In the latter approach, stochastic CRNs are still intrinsically \emph{signal functions} with a continuous time domain and a discrete co-domain of integral molecular counts, and therefore the FRP style is still appropriate.
-However, due to the stochasticity of these CRNs, the input and output signals necessarily must consist of probability distributions over possible state configurations.
+However, due to the stochasticity of these CRNs, the input and output signals must consist of probability distributions over possible state configurations.
 This introduces another challenging layer of complexity to programming with stochastic CRNs.
 
 We propose to develop a variant of \reactamole{} with signal function types such as a \hask{SCRN a b} for stochastic CRNs that natively supports types \hask{Bool} and \hask{Int} data types.
 However, due to the extra layer of probability theory CRN development, our preliminary work for stochastic CRNs development explores the \emph{leader-directed} approach which is discussed in the following section.
 We plan to use the data from this preliminary investigation to inform our development of the more sophisticated FRP approach over probabilistic signals.
 
-% 4. FRP and Stochastic CRNs
-%     * Briefly introduce the stochastic CRN model and constrast its
-%       unique qualities with the deterministic I/O CRN model
-%     * Discuss the multiple approaches that could be explored to
-%       provide language support for SCRNs, in particular, the deterministic
-%       function computation approach and the more general probability
-%       distribution approach
-%
+Our initial work producing a variant of \reactamole{} for stochastic CRNs is based on the leader-directed approaches used in~\cite{jAnAsEi08,jSCWB08,Doty2018}.
+We developed another Haskell library akin to \reactamole{} with a datatype \hask{SCRN a b} that represents a pure function, transforming inputs of type \hask{a} into outputs of type \hask{b}.
+This library currently supports \hask{Int}s, dual-rail \hask{Bool}s, and pairs \hask{(a,b)}, and includes primitive stochastic CRNs inspired by~\cite{cChDoSo12} and various combinators such as \hask{>>>}, \hask{&&&}, and \hask{***}.
+For example, the so-called ``hailstone'' function from the famous Collatz conjecture can be defined with:
+\begin{haskellcode}
+hailstone :: SCRN Int Int
+hailstone = (is_even &&& (divide 2 &&& (multiply 3 >>> add 1))) >>> mux
+\end{haskellcode}
+Our prototype library enforces that each functions input/output types match.
+For example, \hask{mux} has a type signature of \hask{SCRN (Bool (Int, Int)) Int} and connects the appropriate value to the output based on the value of the \hask{Bool} parameter.
+Each stage of the stochastic CRN computation is implicitly directed by an unnamed leader molecule, generated when the \hask{SCRN a b} datatype is compiled to a low-level CRN.
+Any stochastic CRN that computes a sufficiently complex function necessarily must have a positive probability of error.
+Our library also ensures this probability of error is bounded using a clocking module similar to~\cite{jSCWB08}.
 
-\subsection{Leader-Directed Functional Programming}
-\label{sub:scrn_haskell_language}
+Although this preliminary work on leader-directed programming has been fruitful, it does not take full advantage of \emph{reactive} programming.
+Ultimately, our goal is to extend this work to support full-fledge FRP support for probabilistic signals which is outlined in the following section.
 
-To be written...
 
-%     A. Leader-Directed Functional Programming
-%         * Draw connections to current literature on deterministic function
-%           computation, leader election, and Turing completeness results
-%           that often use leader molecules to direct the computation
-%         * Overview Bryce's work on stochastic CRNs, the SCRN type, the
-%           Arrow implementations, etc.
-%         * Show how the hailstone function can be easily implemented
-%           using FRP combinators
-%         * Explain how each stage of the computation may be compiled to
-%           have an arbitrarily low chance of failure
-%         * Contrast this approach with the IOCRN and how its inputs are
-%           consumed during the computation
-%         * Explain that leader-directed 
-%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{FRP and Probabilistic Signals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 To be written...
 
