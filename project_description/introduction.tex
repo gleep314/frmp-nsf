@@ -25,10 +25,10 @@ Deterministic CRNs are used to model chemical reactions in large-volume environm
 
 Molecular computation is significantly different from classical computing models and has various advantages and disadvantages.
 For example, stochastic CRNs can be regarded as massively parallel distributed computing systems and are closely related to population protocols~\cite{jAADFP06,jAAER07,jAnAsEi08,jAnAsEi08a,Doty2018}.
-Their probabilistic nature is being harnessed to simulate arbitrary probability distributions and deploy probabilistic algorithms at a nanoscale~\cite{jCaKwLa18,jCOAW19,cWinfe19}.
-In fact, the probabilistic semantics of stochastic CRNs is necessary for Turing-powerful computation; only semi-linear functions can be computed with probability 1~\cite{cChDoSo12,cCuDoSo14,Doty2015,doty19}.
+Their probabilistic nature is harnessed to simulate arbitrary probability distributions and deploy probabilistic algorithms at the nanoscale~\cite{jCaKwLa18,jCOAW19,cWinfe19}.
+In fact, the probabilistic semantics of stochastic CRNs is necessary for Turing-complete computation; only semi-linear functions can be computed with probability 1~\cite{cChDoSo12,cCuDoSo14,Doty2015,doty19}.
 Programming with molecular reactions also enables programmers to seamlessly interface complex decision processes with existing biological systems, and various cell-to-cell molecular communication protocols are actively being investigated~\cite{jPieAky10,jFYECG16,jChou19}.
-Although current methods for molecular programming are not expected to surpass silicon processing inefficiency, the techniques have the potential to broadly impact biomedicine research~\cite{jorge2018overview}.
+% Although current methods for molecular programming are not expected to surpass silicon processing efficiency, the techniques have the potential to broadly impact biomedicine research~\cite{jorge2018overview}.
 
 The unique nature of molecular computation introduces new challenges for programmers.
 Molecular reactions are \emph{always active}, which makes even simple sequential tasks challenging to achieve without significant overhead.
@@ -132,7 +132,7 @@ For example, Visual GEC~\cite{jPedPhi09}, Visual DSD~\cite{jLYPEP11}, CRN++~\cit
 Visual GEC is concerned with synthetic biology, and its language is based on promoters, ribosome binding sites, protein coding regions and terminators.
 Visual DSD is explicitly designed for specifying DNA strand displacement networks.
 Kaemika is...\todo{PM, can you shut down Kaemika without offending Luca?}
-While the languages defined in these tools work well for their domains, they provide low-level programming constructs the make the development difficult.
+While the languages defined in these tools work well for their domains, they provide low-level programming constructs that make the development difficult.
 Even with the help of tools, it is easy to make subtle mistakes in programs that may be intermittent and difficult to find and debug.
 In contrast, CRN++ is a high-level language that gives molecular programmers the ability to specify programs in a more familiar imperative style.
 The techniques used in this paper serialize computations in order to achieve this effect, which is a severe restriction on what is, otherwise, an inherently parallel system.
