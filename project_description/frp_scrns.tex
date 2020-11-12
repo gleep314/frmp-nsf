@@ -35,10 +35,14 @@ Our initial work producing a variant of \reactamole{} for stochastic CRNs is bas
 We developed a second Haskell library akin to \reactamole{} with a datatype \hask{SCRN a b} that represents a pure function, transforming inputs of type \hask{a} into outputs of type \hask{b}.
 This library currently supports \hask{Int}s, dual-rail \hask{Bool}s, and pairs \hask{(a,b)}, and includes primitive stochastic CRNs inspired by~\cite{cChDoSo12} and various combinators such as \hask{>>>}, \hask{&&&}, and \hask{***}.
 For example, the so-called ``hailstone'' function from the famous Collatz conjecture can be defined with:
+\begin{center}
+\begin{minipage}{0.9\textwidth}
 \begin{haskellcode}
 hailstone :: SCRN Int Int
 hailstone = (is_even &&& (divide 2 &&& (multiply 3 >>> add 1))) >>> mux
 \end{haskellcode}
+\end{minipage}
+\end{center}
 Our prototype library enforces that each functions input/output types match.
 For example, \hask{mux} has a type signature of \hask{SCRN (Bool (Int, Int)) Int} and connects the appropriate value to the output based on the value of the \hask{Bool} parameter.
 Each stage of the stochastic CRN computation is implicitly directed by an unnamed leader molecule, generated when the \hask{SCRN a b} datatype is compiled to a low-level CRN.
@@ -53,10 +57,9 @@ If the heartbeat ever stops, the CRN will detect a fault and emit a signal to in
 The watchdog timer CRN consists of several \emph{modules} which are probabilistic signal functions, satisfying a CSL formula.
 One such formula from~\cite{jEKLLLM17} is:
 \[
-    P_{\ge 1}\Box\left(\text{healthy} \rightarrow P_{\le1-\epsilon}\Diamond_{\le t}(\text{hbHigh}\lor\lnot\text{healthy})\right)
+    P_{\ge 1}\Box\left(\text{healthy} \rightarrow P_{\le1-\epsilon}\Diamond_{\le t}(\text{hbHigh}\lor\lnot\text{healthy})\right).
 \]
-which requires that whenever the system being monitored is ``healthy,'' it will produce a heartbeat pulse in the near future with high probability.
-In this work, we will investigate approaches enabling type-directed functional programming that will help us develop stochastic CRNs that satisfy safety properties such as this.
+We will extend our LTL-based type system for DCRNs with appropriate probabilistic constructs from CSL to capture these properties with types.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{FRP and Probabilistic Signals}
