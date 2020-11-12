@@ -158,14 +158,14 @@ x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
 \end{center}
 \end{figure}
 
+
 \subsection{From Prototype to Complete Language}
-
-In summary \reactamole{} in its current state is a embedded DSL for programming deterministic CRNs using signal-based FRP that supports boolean and pair types.
+\reactamole{} in its current state is an embedded domain specific language for programming deterministic CRNs using signal-based FRP that supports Boolean and pair types.
 Also, the static type system of Haskell immediately gives us some level of safety guarantees.
-For example, we cannot feed a signal encoding a boolean to a CRN expecting a pair.
+For example, we cannot feed a signal encoding a Boolean to a CRN expecting a pair.
 
-With sufficient gumption, we can encode other types and more complicated programs using booleans and pairs alone.
-In addition to concerns of inefficiency---exponential blow-ups in CRN size due to binary encodings---and impracticalness---working solely in booleans is akin to programming in circuits directly---we are also not taking advantage of the \emph{analog} nature of computational biology by using boolean encodings.
+With sufficient gumption, we can encode other types and more complicated programs using Booleans and pairs alone.
+In addition to concerns of inefficiency, working solely in Booleans is akin to programming in circuits directly and does not fully harness the \emph{analog} nature of computational biology.
 Furthermore, the properties that we check via types in \reactamole{} are relatively simple---is a CRN fed inputs of the appropriate type?
 Programming with CRNs is more difficult than conventional programming not only because of the physical substrate, but because of the need to account for \emph{timing} in our computations.
 For example, our orrectness guarantees need to account for \emph{delay} that accumulates in the network of reactions.
