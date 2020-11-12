@@ -45,13 +45,15 @@ We present our initial findings that help validate FRP as a promising approach t
 
 The following key insight motives our design of \reactamole{}:
 \begin{displayquote}
-A chemical reaction network is a signal function in a functional reactive program that outputs molecule concentrations.
+A chemical reaction network is a signal function in a functional reactive program over molecule concentrations.
 \end{displayquote}
-In \reactamole, we realize this with a type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
+In our FRP interpretation of molecular programming, molecules and their concentrations serve as signals that encode values of various types.
+A CRN, then, becomes a time-varying function of values, a \emph{signal function}.
+In \reactamole, we realize this with the type, \hask{DCRN a b}, the type of deterministic CRNs that take values of type \hask{a} as input and produce values of type \hask{b}.
+This is comparable to the signal function type found in many FRP libraries, \eg, \hask{SF a b} as defined in Yampa.
+The various FRP combinators over signal function then take CRNs as input and produce CRNs as output.
 
-A deterministic CRN would then be typed with \hask{DCRN a b} that is comparable to Yampa's signal function \hask{SF a b} so that it receives a time varying signal \hask{Time -> a} and produces a new signal \hask{Time -> b}.
 For example, the NAND gate CRN described above would have type:
-
 \begin{haskellcode}
 nand :: DCRN (Bool, Bool) Bool
 \end{haskellcode}
