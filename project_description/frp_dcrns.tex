@@ -54,7 +54,7 @@ Instead, it provides a set of \emph{primitive signal functions} as well as \emph
 
 To do this, \reactamole{} works exclusively with the \emph{input/output chemical reaction network} (\emph{I/O CRN}) model of Klinge, Lathrop, and Lutz~\cite{jKlLaLu20}.
 An I/O CRN is a deterministic CRN where reactants act exclusively as catalysts, \ie, are not consumed in the reaction.
-This means that the inputs to a CRN effectively are read-only values which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner, avoiding thorny issues such as race conditions between reactants.
+This means that the inputs to a CRN effectively are read-only values which allows \reactamole{}'s combinators to manipulate CRNs in a functional manner.
 
 As an example, the NAND gate CRN described previously would have type:
 \begin{haskellcode}
@@ -117,39 +117,26 @@ x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
 
 \subsection{From Prototype to Complete Language}
 
+In summary \reactamole{} in its current state is a embedded DSL for programming deterministic CRNs using signal-based FRP that supports boolean and pair types.
+Also, the static type system of Haskell immediately gives us some level of safety guarantees.
+For example, we cannot feed a signal encoding a boolean to a CRN expecting a pair.
+
+With sufficient gumption, we can encode other types and more complicated programs using booleans and pairs alone.
+In addition to concerns of inefficiency---exponential blow-ups in CRN size due to binary encodings---and impracticalness---working solely in booleans is akin to programming in circuits directly, we are also not taking advantage of the \emph{analog} nature of computational biology by using boolean encodings.
+Furthermore, the properties that we check via types in \reactamole{} are relatively simple---is a CRN fed inputs of the appropriate type?
+Programming with CRNs is more difficult than conventional programming not only because of the physical substrate, but because of the need to account for \emph{timing} in our computations.
+
+To this end, we propose extending \reactamole{} among two dimensions in this project:
 \begin{itemize}[itemsep=0pt]
-  \item Shape of target language and missing features.
-  \item Discussion of LTL-based type system.
+  \item Implementation of additional types to \reactamole{} so that it approaches a core, functional programming language.
+  \item The addition of a type system based on \emph{linear temporal logic} which is commonly used to verify CRNs.
 \end{itemize}
+By pursuing these two dimensions, we intend to evolve \reactamole from an embedded DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
 
-\todo{I am just rambling at this point. How much detail do we want to go into in the implementation of all this?}
+\subsubsection{Representing Additional Types with Species}
 
-% 3. FRP and Deterministic CRNs
-%     * Briefly introduce the input/output deterministic CRN model
-%     * Draw connections between between the previous works on
-%       chemical circuits and finite automata and FRP
-%     * In particular, emphasize how these CRNs are literally signal
-%       functions in the FRP sense that transform one type of signal
-%       into another
-%     * Drawing connections with how real biological systems use
-%       molecular communication and react to input signals changing
-%       such as the cell cycle switch
-%     * Overview Ally's work on deterministic CRNs, the IOCRN type,
-%       the Arrow implementations, and examples
-%     * Show how the NAND gate and S-R latch can easily be implemented
-%       in this characterization. Use the Yampa Arrow syntax to
-%       demonstrate how the S-R latch can be implemented using
-%       two NAND gates and the Arrow combinators
-%     * Emphasize how the Bool type encapsulates the idea of a dual
-%       rail encoding whereas the Double type is a continuous real
-%       valued signal
-%     * Discuss how STL (a continuous-space variant of LTL) is a natural
-%       choice for a type system. Give examples of how the requirements
-%       of the NAND gate and finite automata can be specified in STL
+\subsubsection{A Linear Temporal Logic-based Type System}
 
-
-\subsection*{Titus Random Thoughts on NAND Requirements in STL}
-\todo{These are experimental ideas that can be discarded if not needed}
 In PI Klinge and PI Lathrop's paper on robust chemical circuits CITE, they formally define the requirements of a NAND gate.
 Their definition can easily be written in \emph{signal temporal logic} (\emph{STL}) which is almost identical to LTL except that it tailored to systems with continuous state spaces.
 The NAND gate has four input species \( X_1, \overline{X}_1, X_2, \overline{X}_2  \) and two output species \( Y, \overline{Y} \).
@@ -180,7 +167,7 @@ However, this approach to molecular programming is exactly functional reactive p
 We propose to place a type system on top of our embedded Haskell language that statically verifies STL statements of this form.
 To our knowledge, such an approach has never been attempted, and could have broad impacts on both the correctness and safety of molecular programs and accelerate the development process.
 
-\subsection*{Titus Random Thoughts on NFA Requirements in STL}
+\paragraph{Example: Verifying NFAs}
 Similar to the previous section, PI Klinge and PI Lathrop were co-authors on a paper using deterministic CRNs to implement arbitrary nondeterministic finite automata (NFAs).
 These CRNs had formal requirements that are also conducive to functional reactive programming.
 In particular, the input signals provided to the an NFA-simulating CRN included a sequence of \emph{symbol events} which are intervals \( [a,b] \) that encode a symbol \( a\in\Sigma \) of the NFA's input alphabet.
@@ -189,3 +176,28 @@ The output signal of this CRN also consisted of a sequence of intervals \( I_1, 
 
 In this case, the NFA-simulating CRN is also a signal function that receives an input signal that contains a sequence of symbol events and produces an output signal consisting of state change events.
 In particular, the CRN can be regarded as a \emph{casual function} that implements the transition function \( \delta(q,a) \) of the NFA.
+
+% 3. FRP and Deterministic CRNs
+%     * Briefly introduce the input/output deterministic CRN model
+%     * Draw connections between between the previous works on
+%       chemical circuits and finite automata and FRP
+%     * In particular, emphasize how these CRNs are literally signal
+%       functions in the FRP sense that transform one type of signal
+%       into another
+%     * Drawing connections with how real biological systems use
+%       molecular communication and react to input signals changing
+%       such as the cell cycle switch
+%     * Overview Ally's work on deterministic CRNs, the IOCRN type,
+%       the Arrow implementations, and examples
+%     * Show how the NAND gate and S-R latch can easily be implemented
+%       in this characterization. Use the Yampa Arrow syntax to
+%       demonstrate how the S-R latch can be implemented using
+%       two NAND gates and the Arrow combinators
+%     * Emphasize how the Bool type encapsulates the idea of a dual
+%       rail encoding whereas the Double type is a continuous real
+%       valued signal
+%     * Discuss how STL (a continuous-space variant of LTL) is a natural
+%       choice for a type system. Give examples of how the requirements
+%       of the NAND gate and finite automata can be specified in STL
+
+
