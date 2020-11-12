@@ -177,9 +177,9 @@ To this end, we propose extending \reactamole{} among two dimensions in this pro
 \end{itemize}
 By pursuing these two dimensions, we intend to evolve \reactamole from an embedded Haskell DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
 
-\subsubsection{Representing Additional Types with Species}
 
-Rather than encoding everything with booleans, we would like to encode various types in a more direct manner with species whenever possible.
+\subsubsection{Representing Additional Types with Species}
+Rather than encoding everything with Booleans, we would like to encode various types in a more direct manner with species whenever possible.
 For example, consider a \hask{Real} type encoding a real number.
 In a digital computer, this would be approximated using a rational number.
 However, we can encode a \hask{Real} directly using a single species concentration!
@@ -189,11 +189,11 @@ However, because of the differences in physical substrate, this set of operation
 For example, integration with \hask{Real} values represented as single species concentrations is trivial to implement.
 The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \):
 \[
-X → X + Y
+  X \goesto{} X + Y
 \]
 In contrast, addition over \hask{Real}s is impossible to implement directly for unknown inputs.
-Because I/O CRN inputs are catalytic, we cannot consume the inputs to a would-be addition operation which is necessary for its implementation.
-Thus, designing an appropriate set of primitives and associated operations for \reactamole will require careful consideration of what is necessary to enable a wide variety of programs while also adhering to the limits of our molecular context.
+In order to accomplish this, the I/O CRN would not only need the real-valued concentrations of its input signal, but also their \emph{derivatives}.
+Thus, designing an appropriate set of primitives and associated operations for \reactamole{} will require careful consideration of what is necessary to enable a wide variety of programs while also adhering to the limits of our molecular context.
 
 Ultimately, our goal is to implement suitable representations for enough types so that \reactamole is similar in expressive power to core, functional programming languages in the literature such as Haskell's SystemFC~\cite{weirich:2013:fc} and Core ML for OCaml~\cite{remy:2001:ocaml}.
 These core calculi capture the essence of their respective languages while being minimal in size which allows us to study their properties while having confidence that we haven't lost anything essential in translation.
