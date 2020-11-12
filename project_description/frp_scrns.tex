@@ -28,11 +28,11 @@ However, due to the stochasticity of these CRNs, the input and output signals mu
 This introduces another challenging layer of complexity to programming with stochastic CRNs.
 
 We propose to develop a variant of \reactamole{} with signal function types such as a \hask{SCRN a b} for stochastic CRNs that natively supports types \hask{Bool} and \hask{Int} data types.
-However, due to the extra layer of probability theory in CRN development, our preliminary work for stochastic CRNs development explores the \emph{leader-directed} approach which is discussed in the following section.
+However, due to the extra layer of probability theory in CRN development, our preliminary work for stochastic CRNs development explores the \emph{leader-directed} approach discussed next.
 We plan to use the data from this preliminary investigation to inform our development of the more sophisticated FRP approach over probabilistic signals.
 
 Our initial work producing a variant of \reactamole{} for stochastic CRNs is based on the leader-directed approaches used in~\cite{jAnAsEi08,jSCWB08,Doty2018}.
-We developed another Haskell library akin to \reactamole{} with a datatype \hask{SCRN a b} that represents a pure function, transforming inputs of type \hask{a} into outputs of type \hask{b}.
+We developed a second Haskell library akin to \reactamole{} with a datatype \hask{SCRN a b} that represents a pure function, transforming inputs of type \hask{a} into outputs of type \hask{b}.
 This library currently supports \hask{Int}s, dual-rail \hask{Bool}s, and pairs \hask{(a,b)}, and includes primitive stochastic CRNs inspired by~\cite{cChDoSo12} and various combinators such as \hask{>>>}, \hask{&&&}, and \hask{***}.
 For example, the so-called ``hailstone'' function from the famous Collatz conjecture can be defined with:
 \begin{haskellcode}
