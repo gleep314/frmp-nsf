@@ -94,6 +94,46 @@ We have also implemented the lifting function of arrows \hask{arr} but specializ
 This implementation utilizes \hask{nand} to take \emph{any} Boolean function written in Haskell and translate it into an appropriate CRN.
 For example, lifting a Haskell-based definition of \hask{&&}, the logical AND function, \hask{arr2 (&&)} yields a CRN whose underlying \reactamole{} implementation is given in~\autoref{fig:and-crn}.
 
+% \begin{figure*}[t!]
+%     \centering
+%     \begin{subfigure}[t]{0.48\textwidth}
+%         \centering
+%         \begin{minipage}[t][1.5in][b]{0.48\textwidth}
+%             \vspace*{\fill}
+%             \begin{align*}
+%                 2 Y + \overline{Y} &\goesto{0.03} 3 \overline{Y}\\
+%                 Y + 2\overline{Y} &\goesto{0.03} 3\overline{Y}\\
+%                 X_0 + X_1 + Y &\goesto{0.01} X_0 + X_1 + \overline{Y}\\
+%                 \overline{X}_0 + \overline{Y} &\goesto{0.01} \overline{X}_0 + Y\\
+%                 \overline{X}_1 + \overline{Y} &\goesto{0.01} \overline{X}_1 + Y
+%             \end{align*}
+%             \vspace*{\fill}
+%         \end{minipage}
+%         \vspace*{-1.5em}
+%         \caption{}
+%     \end{subfigure}
+%     ~
+%     \begin{subfigure}[t]{0.48\textwidth}
+%         \centering
+%         \begin{minipage}[t][1.5in][b]{0.48\textwidth}
+%             \vspace*{\fill}
+%             \begin{align*}
+%                 2 Z + \overline{Z} &\goesto{0.03} 3 \overline{Z}\\
+%                 Z + 2\overline{Z} &\goesto{0.03} 3\overline{Z}\\
+%                 2 Y + Z &\goesto{0.01} 2 Y + \overline{Z}\\
+%                 \overline{Y} + \overline{Z} &\goesto{0.01} \overline{Y} + Z\\
+%                 \overline{Y} + \overline{Z} &\goesto{0.01} \overline{Y} + Z
+%             \end{align*}
+%             \vspace*{\fill}
+%         \end{minipage}
+%         \vspace*{-1.5em}
+%         \caption{}
+%     \end{subfigure}
+%     \caption{\label{fig:logical_and_example}
+%     }
+% \end{figure*}
+
+
 \begin{figure}
 \begin{center}
 \begin{BVerbatim}
@@ -110,7 +150,10 @@ x4 + x4 + x5 -[1.0e-2]-> x4 + x4 + ~x5
 \end{BVerbatim}
 \caption{The generated CRN from lifting logical AND, \hask{arr2 (&&)}.
   \hask{x0}, \hask{~x0}, \hask{x1}, \hask{~x1} are the dual-rail species of the inputs to \hask{(&&)}.
-  \hask{x5} and \hask{~x5} are the dual-rail species of the output.}
+  \hask{x5} and \hask{~x5} are the dual-rail species of the output.
+  This implementation of logical AND is implemented with \hask{nand >>> lnot} where \hask{lnot} is implemented with another \hask{nand} gate.
+  The \hask{nand} gate uses the implementation of~\cite{rdc} and consists of five reactions.
+  }
 \label{fig:and-crn}
 \end{center}
 \end{figure}
