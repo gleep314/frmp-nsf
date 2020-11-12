@@ -181,11 +181,9 @@ Furthermore, the properties that we check via types in \reactamole{} are relativ
 Programming with CRNs is more difficult than conventional programming not only because of the physical substrate, but because of the need to account for \emph{timing} in our computations.
 For example, our orrectness guarantees need to account for \emph{delay} that accumulates in the network of reactions.
 
-To this end, we propose extending \reactamole{} among two dimensions in this project:
-\begin{itemize}[itemsep=0pt]
-  \item Implementation of additional types to \reactamole{} so that it approaches a core, functional programming language.
-  \item The addition of a type system based on \emph{linear temporal logic} which is commonly used to verify CRNs.
-\end{itemize}
+To this end, we propose extending \reactamole{} along two dimensions:
+(1) Implement additional types so that it approaches a core, functional programming language, and
+(2) developing a type system based on \emph{linear temporal logic} which is commonly used to verify CRNs.
 By pursuing these two dimensions, we intend to evolve \reactamole from an embedded Haskell DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
 
 \subsubsection{Representing Additional Types with Species}
