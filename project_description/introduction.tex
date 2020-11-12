@@ -131,7 +131,7 @@ To solve these issues, researchers have investigated linguistic support for mole
 For example, Visual GEC~\cite{jPedPhi09}, Visual DSD~\cite{jLYPEP11}, CRN++~\cite{Vasic2020}, and Kaemika~\cite{cardelliKaemika} all define languages for specifying molecular programs.
 Visual GEC is concerned with synthetic biology, and its language is based on promoters, ribosome binding sites, protein coding regions and terminators.
 Visual DSD is explicitly designed for specifying DNA strand displacement networks.
-Kaemika is...\todo{PM, can you shut down Kaemika without offending Luca?}
+Kaemika is a chemical reaction network simulator that also includes a language for specifying reactions that extends the notation of chemical reactions with functional programming constructs, in effect, a macro-system for quickly building up chemical reactions.
 While the languages defined in these tools work well for their domains, they provide low-level programming constructs that make the development difficult.
 Even with the help of tools, it is easy to make subtle mistakes in programs that may be intermittent and difficult to find and debug.
 In contrast, CRN++ is a high-level language that gives molecular programmers the ability to specify programs in a more familiar imperative style.
@@ -156,12 +156,11 @@ Not only will this proposed work help to advance knowledge into the field of mol
 
 This proposal is organized into the following sections.
 Section~\ref{sec:frp_background} provides a light introduction into the functional reactive programming paradigm.
-Since the semantics and use of deterministic CRNs and stochastic CRNs are so wildly\todo{reword} different, we separate our proposed work into two main sections.
+Since the semantics and use of deterministic CRNs and stochastic CRNs are fundamentally dissimilar, we separate our proposed work into two main sections.
 In particular, Sections~\ref{sec:frp_dcrns} and~\ref{sec:frp_scrns} details our FRP language design plans for deterministic CRNs and stochastic CRNs, respectively.
 Section~\ref{sec:software_support} overviews our plans for developing software support for these languages.
 Sections~\ref{sec:broader_impacts} and~\ref{sec:timeline} include more information on the broader impacts and the timeline of the proposed work.
 Finally, Section~\ref{sec:prior_nsf_support} is an overview of the PIs' prior NSF support.
-\todo{Do we actually need this summary paragraph or is it a little overkill?}
 
 % Intellectual Merit: The Intellectual Merit criterion encompasses the potential to advance knowledge; and
 %   1. What is the potential for the proposed activity to: Advance knowledge and 
