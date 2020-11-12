@@ -48,7 +48,15 @@ Our library also ensures this probability of error is bounded using a clocking m
 Although this preliminary work on leader-directed programming has been fruitful, it does not take full advantage of \emph{reactive} programming.
 Ultimately, we will extend this work to support full-fledge FRP support over probabilistic signals.
 We will investigate rich typing support using probabilistic logics such as LTL as well as related logics such as \emph{continuous stochastic logic} (\emph{CSL})~\cite{cASSB96} which is known to characterize a bisimulation of continuous-time Markov processes~\cite{DESHARNAIS200399}.
-
+For example, in~\cite{jEKLLLM17}, the authors develop a stochastic CRN that implements a ``watchdog timer'' which monitors a probabilistic input signal of \emph{heartbeat} pulses.
+If the heartbeat ever stops, the CRN will detect a fault and emit a signal to initiate a process to recover from the fault.
+The watchdog timer CRN consists of several \emph{modules} which are probabilistic signal functions, satisfying a CSL formula.
+One such formula from~\cite{jEKLLLM17} is:
+\[
+    P_{\ge 1}\Box\left(\text{healthy} \rightarrow P_{\le1-\epsilon}\Diamond_{\le t}(\text{hbHigh}\lor\lnot\text{healthy})\right)
+\]
+which requires that whenever the system being monitored is ``healthy,'' it will produce a heartbeat pulse in the near future with high probability.
+In this work, we will investigate approaches enabling type-directed functional programming that will help us develop stochastic CRNs that satisfy safety properties such as this.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{FRP and Probabilistic Signals}
