@@ -122,18 +122,56 @@ Also, the static type system of Haskell immediately gives us some level of safet
 For example, we cannot feed a signal encoding a boolean to a CRN expecting a pair.
 
 With sufficient gumption, we can encode other types and more complicated programs using booleans and pairs alone.
-In addition to concerns of inefficiency---exponential blow-ups in CRN size due to binary encodings---and impracticalness---working solely in booleans is akin to programming in circuits directly, we are also not taking advantage of the \emph{analog} nature of computational biology by using boolean encodings.
+In addition to concerns of inefficiency---exponential blow-ups in CRN size due to binary encodings---and impracticalness---working solely in booleans is akin to programming in circuits directly---we are also not taking advantage of the \emph{analog} nature of computational biology by using boolean encodings.
 Furthermore, the properties that we check via types in \reactamole{} are relatively simple---is a CRN fed inputs of the appropriate type?
 Programming with CRNs is more difficult than conventional programming not only because of the physical substrate, but because of the need to account for \emph{timing} in our computations.
+For example, our orrectness guarantees need to account for \emph{delay} that accumulates in the network of reactions.
 
 To this end, we propose extending \reactamole{} among two dimensions in this project:
 \begin{itemize}[itemsep=0pt]
   \item Implementation of additional types to \reactamole{} so that it approaches a core, functional programming language.
   \item The addition of a type system based on \emph{linear temporal logic} which is commonly used to verify CRNs.
 \end{itemize}
-By pursuing these two dimensions, we intend to evolve \reactamole from an embedded DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
+By pursuing these two dimensions, we intend to evolve \reactamole from an embedded Haskell DSL to a full-fledged \emph{FRP-based functional programming language} for programming deterministic chemical reaction networks.
 
 \subsubsection{Representing Additional Types with Species}
+
+Rather than encoding everything with booleans, we would like to encode various types in a more direct manner with species whenever possible.
+For example, consider a \hask{Real} type encoding a real number.
+In a digital computer, this would be approximated using a rational number.
+However, we can encode a \hask{Real} directly using a single species concentration!
+
+For each such type we encode as a primitive, we will also need to provide a set of primitive operations over that type.
+However, because of the differences in physical substrate, this set of operations will necessarily be different than with traditional digital computation.
+For example, integration with \hask{Real} values represented as single species concentrations is trivial to implement.
+The following one-reaction chemical reaction network implements integration for input signal \( X \) and output signal \( Y \):
+\[
+X → X + Y
+\]
+In contrast, addition over \hask{Real}s is impossible to implement directly for unknown inputs.
+Because I/O CRN inputs are catalytic, we cannot consume the inputs to a would-be addition operation which is necessary for its implementation.
+Thus, designing an appropriate set of primitives and associated operations for \reactamole will require careful consideration of what is necessary to enable a wide variety of programs while also adhering to the limits of our molecular context.
+
+Ultimately, our goal is to implement suitable representations for enough types so that \reactamole is similar in expressive power to core, functional programming languages in the literature such as Haskell's SystemFC~\cite{weirich:2013:fc} and Core ML for OCaml~\cite{remy:2001:ocaml}.
+These core calculi capture the essence of their respective languages while being minimal in size which allows us to study their properties while having confidence that we haven't lost anything essential in translation.
+\reactamole could then serve as an intermediate language, like SystemFC, for an eventual surface language that exposes the FRP nature of CRNs in a more user-friendly way.
+At the same time, these core calculi are expressive enough to program in directly, especially for the small-scale implementation we evision performing to program chemical reaction networks.
+
+These core calculi have the following language features in common that we will implement in \reactamole:
+\begin{itemize}[itemsep=0pt]
+  \item Primitive values, \eg, \hask{Unit}, \hask{Boolean}s, \hask{Real}s, \etc
+  \item Products, \ie, \( A \times B \) is the type of values that combine an \( A \) with a \( B \).
+  \item Sums, \ie, \( A + B \) is the type of values that are either an \( A \) or a \( B \).
+\end{itemize}
+By combining products and sums, we obtain algebraic data types, the defining feature of these core, functional programming languages.
+A value of an algebraic data type consists of a \emph{tag} denoting one of a finite set of \emph{constructors} and a collection of \emph{values} fed to that constructor.
+For example, a \hask{Boolean}, in actuality, is a simple algebraic data type with tags \hask{True} and \hask{False} but no associated data.
+In contrast, a \hask{List} has two tags denoting the empty and non-empty lists.
+In the non-empty case, the algebraic data type also specifies the \emph{head} element of the list and its \emph{tail}, the remainder of the list.
+
+Algebraic data types will be of particular interest to us in our exploration of realizing functional programming with CRNs.
+The primary operation we perform over these structures is \emph{pattern matching} which amounts to selecting a branch of a program based on the tag of the datatype.
+This requires that our underlying CRNs are careful constructed so that they respect the delay involved in computing the datatype \emph{before} selecting a branch to execute.
 
 \subsubsection{A Linear Temporal Logic-based Type System}
 

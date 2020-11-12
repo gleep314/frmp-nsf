@@ -7388,3 +7388,34 @@ isbn="978-3-030-60327-4"
   year    = { 2000 },
 }
 
+@inproceedings{weirich:2013:fc,
+author = {Weirich, Stephanie and Hsu, Justin and Eisenberg, Richard A.},
+title = {System FC with Explicit Kind Equality},
+year = {2013},
+isbn = {9781450323260},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2500365.2500599},
+doi = {10.1145/2500365.2500599},
+abstract = {System FC, the core language of the Glasgow Haskell Compiler, is an explicitly-typed variant of System F with first-class type equality proofs called coercions. This extensible proof system forms the foundation for type system extensions such as type families (type-level functions) and Generalized Algebraic Datatypes (GADTs). Such features, in conjunction with kind polymorphism and datatype promotion, support expressive compile-time reasoning.However, the core language lacks explicit kind equality proofs. As a result, type-level computation does not have access to kind-level functions or promoted GADTs, the type-level analogues to expression-level features that have been so useful. In this paper, we eliminate such discrepancies by introducing kind equalities to System FC. Our approach is based on dependent type systems with heterogeneous equality and the "Type-in-Type" axiom, yet it preserves the metatheoretic properties of FC. In particular, type checking is simple, decidable and syntax directed. We prove the preservation and progress theorems for the extended language.},
+booktitle = {Proceedings of the 18th ACM SIGPLAN International Conference on Functional Programming},
+pages = {275–286},
+numpages = {12},
+keywords = {equality, haskell, dependent types},
+location = {Boston, Massachusetts, USA},
+series = {ICFP '13}
+}
+
+@InCollection{remy:2001:ocaml,
+  author =       "Didier R{\'{e}}my",
+  title =        "{U}sing, {U}nderstanding, and {U}nraveling
+                  the {OC}aml {L}anguage",
+  booktitle =    "{A}pplied {S}emantics. Advanced Lectures. LNCS 2395.",
+  publisher =    "Springer Verlag",
+  year =         "2002",
+  editor =    "Gilles Barthe",
+  pages =     "413--537",
+  isbn = {3-540-44044-5},
+  pdf        = {http://pauillac.inria.fr/~remy/cours/appsem/ocaml.pdf},
+  html        = {http://pauillac.inria.fr/~remy/cours/appsem/}
+}
